@@ -62,17 +62,10 @@ def create_knearest_model():
     return model
 
 
-
 def main():
     car_df = read_data()
     car_df = prepare_data(car_df)
-    # test_df, train_df = split_data(car_df)
-    # model = create_model()
-    # trained_model = train_model(model, train_df)
-    # predictions = test_model(trained_model, test_df)
-    # accuracy = evaluate_model(predictions, test_df)
-    #
-    # print(accuracy) # 0.25 % accuracy
+
     x_train, x_test, y_train, y_test = train_test_split(car_df.drop('horsepower', axis=1),
                                                         car_df['horsepower'],
                                                         test_size=TEST_SIZE,

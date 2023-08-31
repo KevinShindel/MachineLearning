@@ -17,7 +17,7 @@ def create_model(x, y, step: int):
     model.fit(x_train, y_train)
     accuracy = model.score(x_test, y_test)
     accuracy = round(accuracy * 100, 3)
-    return (step, accuracy)
+    return step, accuracy
 
 
 def main():
@@ -61,7 +61,7 @@ def main():
         repeat_len = test_sizes.shape[0]
         results = list(executor.map(create_model, repeat(x, repeat_len), repeat(y, repeat_len), test_sizes))
 
-    step, accuracy = next(iter(sorted(results, key=lambda x: x[1], reverse=True)))
+    step, accuracy = next(iter(sorted(results, key=lambda i: i[1], reverse=True)))
     print('Fount max accuracy: ', accuracy, ' with step: ', step)
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=step)

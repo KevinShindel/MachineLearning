@@ -20,13 +20,13 @@ class ZooPredictor:
 
     def train(self):
         raw_data = pd.read_csv(self.__data_path)
-        X = raw_data.loc[:, self.__features]
+        x = raw_data.loc[:, self.__features]
         y = raw_data.loc[:, [self.__target]]
-        X_train, X_test, y_train, y_test = train_test_split(X, y,
+        x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                             random_state=randint(0, 1000),
                                                             test_size=0.3)
-        self.__model.fit(X_train, y_train)
-        self.__score = round(self.__model.score(X_test.values, y_test.values), 2)
+        self.__model.fit(x_train, y_train)
+        self.__score = round(self.__model.score(x_test.values, y_test.values), 2)
         return self
 
     @property

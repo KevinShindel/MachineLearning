@@ -10,16 +10,16 @@ def main():
     filepath = '../../dataset/total_cases.csv'
     df = read_csv(filepath, usecols=['World'])
     df = df.rename(columns={'World': 'cases'}).fillna(0).astype(int)
-    TOTAL_DAYS = df.shape[0] + 1
-    df['days'] = np.arange(1, TOTAL_DAYS)
+    total_days = df.shape[0] + 1
+    df['days'] = np.arange(1, total_days)
 
     print(df.describe())
     print('*' * 30, ' PREPARE DATA ', '*' * 30)
     x = np.array(df['days']).reshape(-1, 1)  # create array from one value each row
     y = np.array(df['cases']).reshape(-1, 1)  # create array from one value each row
 
-    polyFeat = PolynomialFeatures(degree=3)
-    x = polyFeat.fit_transform(x)
+    poly_feat = PolynomialFeatures(degree=3)
+    x = poly_feat.fit_transform(x)
 
     print('*' * 30, ' TRAIN DATA ', '*' * 30)
     model = LinearRegression()
@@ -31,9 +31,9 @@ def main():
     y0 = model.predict(x)
 
     print('*' * 30, ' PREDICTION ', '*' * 30)
-    DAYS = 50
-    x1 = np.arange(1, TOTAL_DAYS+DAYS).reshape(-1, 1)
-    y1 = model.predict(polyFeat.fit_transform(x1))
+    days = 50
+    x1 = np.arange(1, total_days+days).reshape(-1, 1)
+    y1 = model.predict(poly_feat.fit_transform(x1))
     plt.plot(y1, '--r')
     plt.plot(y, '--b')
     plt.show()

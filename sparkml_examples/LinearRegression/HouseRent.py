@@ -8,7 +8,15 @@ from sklearn.preprocessing import LabelEncoder
 def main():
     print('#### LOAD DATA ####')
     filepath = '../../dataset/houses_to_rent.csv'
-    used_columns = ['city', 'rooms', 'bathroom', 'parking spaces', 'fire insurance', 'furniture', 'rent amount', 'animal' ]
+    used_columns = ['city',
+                    'rooms',
+                    'bathroom',
+                    'parking spaces',
+                    'fire insurance',
+                    'furniture',
+                    'rent amount',
+                    'animal']
+
     df = pd.read_csv(filepath, usecols=used_columns)
     print(df.head())
 
@@ -26,28 +34,28 @@ def main():
     x = np.array(df.drop(['rent amount'], axis=1))
     y = np.array(df['rent amount'])
 
-    xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=0.3)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
 
     model = LinearRegression()
-    model.fit(xTrain, yTrain)
-    accuracy = model.score(xTest, yTest)
+    model.fit(x_train, y_train)
+    accuracy = model.score(x_test, y_test)
     print('Coeff: ', model.coef_)
     print('Intercept: ', model.intercept_)
     print('Accuracy: ', round(accuracy*100, 3), '%')
 
     print('#### EVALUATION ####')
-    testVals = model.predict(xTest)
+    test_vals = model.predict(x_test)
 
     error = []
-    for i, testVal in enumerate(testVals):
-        error.append(yTest[i] - testVal)
-        print(f'Actual value: {yTest[i]}, predicted: {int(testVals[i])}, error: {int(error[i])}')
+    for i, testVal in enumerate(test_vals):
+        error.append(y_test[i] - testVal)
+        print(f'Actual value: {y_test[i]}, predicted: {int(test_vals[i])}, error: {int(error[i])}')
 
     for_predict = np.array(df.drop(['rent amount'], axis=1))
 
-    predictedVals = model.predict(for_predict)
+    predicted_vals = model.predict(for_predict)
 
-    df['predicted rent amount'] = predictedVals.astype(int)
+    df['predicted rent amount'] = predicted_vals.astype(int)
     df['error_int'] = df['rent amount'] - df['predicted rent amount']
     df['error_%'] = (df['predicted rent amount'] * 100 / df['rent amount']).round(2) - 100
 

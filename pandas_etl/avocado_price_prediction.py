@@ -4,7 +4,8 @@ from matplotlib import pyplot as plt
 
 def main():
     # avocado price prediction
-    avocado_df = pd.read_csv('../dataset/avocado.csv',
+    avocado_df = pd.read_csv('../dataset/avocado.zip',
+                             compression='zip',
                              parse_dates=True,
                              index_col='Date')
     avocado_df = avocado_df.drop(avocado_df.columns[0], axis=1)
@@ -25,8 +26,6 @@ def main():
 
     albany_avocado_df['AveragePrice'].plot()
     plt.show()
-
-
 
 
 if __name__ == '__main__':

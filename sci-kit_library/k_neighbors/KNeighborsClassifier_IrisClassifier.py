@@ -15,6 +15,7 @@ def import_data():
     iris_df = pd.read_csv('https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv')
     return iris_df
 
+
 # 3. clean dataset
 def clean_data(iris_df):
     # encode species
@@ -23,6 +24,7 @@ def clean_data(iris_df):
 
     return iris_df
 
+
 # 4. split dataset into training and test sets
 def split_data(iris_df):
     # split dataset into training and test sets
@@ -30,11 +32,13 @@ def split_data(iris_df):
     test_df = iris_df.drop(train_df.index)
     return train_df, test_df
 
+
 # 5. create model
 def create_model():
     # create model
     model = KNeighborsClassifier(n_neighbors=3)
     return model
+
 
 # 6. train model
 def train_model(model, train_df):
@@ -42,17 +46,20 @@ def train_model(model, train_df):
     model.fit(train_df.drop('species', axis=1), train_df['species'])
     return model
 
+
 # 7. test model
 def test_model(model, test_df):
     # test model
     predictions = model.predict(test_df.drop('species', axis=1))
     return predictions
 
+
 # 8. evaluate model
 def evaluate_model(predictions, test_df):
     # evaluate model
     accuracy = metrics.accuracy_score(predictions, test_df['species'])
     return accuracy
+
 
 # 9. improve model
 def improve_model(model):
@@ -63,6 +70,7 @@ def improve_model(model):
     ])
 
     return improved_model
+
 
 # 10. present results
 def present_results(accuracy):
@@ -84,6 +92,7 @@ def main():
     predictions = test_model(improved_model, test_df)
     accuracy = evaluate_model(predictions, test_df)
     present_results(accuracy)
+
 
 if __name__ == '__main__':
     main()

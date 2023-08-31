@@ -33,25 +33,23 @@ def import_data():
 
 
 # 3. clean dataset
-def clean_data(titanic_df):
+def clean_data(df):
     # drop columns that are not useful
-    titanic_df = titanic_df.drop(['name', 'ticket', 'cabin'], axis=1)
-    return titanic_df
+    df = df.drop(['name', 'ticket', 'cabin'], axis=1)
+    return df
 
 
 # 4. split dataset into training and test sets
-def split_data(titanic_df):
+def split_data(df):
     # split dataset into training and test sets
-    train_df = titanic_df.sample(frac=TRAIN_SIZE, random_state=0)
-    test_df = titanic_df.drop(train_df.index)
+    train_df = df.sample(frac=TRAIN_SIZE, random_state=0)
+    test_df = df.drop(train_df.index)
     return train_df, test_df
 
 
 # 5. create model
 def create_model():
-    # create model
-    model = LogisticRegression(max_iter=MAX_ITER)
-    return model
+    return LogisticRegression(max_iter=MAX_ITER)
 
 
 # 6. train model

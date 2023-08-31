@@ -22,7 +22,7 @@ def data_preparation():
     feature_df = df.loc[:, feature_names]
     target_df = df.loc[:, 'species']
 
-    X = df.loc[:, feature_names].values
+    x = df.loc[:, feature_names].values
     y = df.loc[:, 'species'].values
 
 
@@ -41,21 +41,20 @@ def linear_regression_intro():
     # check for missing values
     assert bool(df.isnull().sum().any()) is False
 
-    X = df.loc[:, ['x']].values
+    x = df.loc[:, ['x']].values
     y = df.loc[:, ['y']].values
 
     # make model
     reg = LinearRegression(fit_intercept=True)
-    reg.fit(X, y)
+    reg.fit(x, y)
 
     # make predictions
-    once_prediction = reg.predict(X[0].reshape(1, -1))
-    multiple_predictions = reg.predict(X[:5].reshape(-1, 1))
+    once_prediction = reg.predict(x[0].reshape(1, -1))
+    multiple_predictions = reg.predict(x[:5].reshape(-1, 1))
 
     # measure the performance
-    score = round(reg.score(X, y), 2)
+    score = round(reg.score(x, y), 2)
     print('Current score: ', score, ' %')
-
 
     # Plot the data
     plt.scatter(df['x'], df['y'])
@@ -66,8 +65,8 @@ def linear_regression_intro():
     # Plotting the Best Fit Linear Regression Line in Red
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 7))
 
-    ax.scatter(X, y, color='black')
-    ax.plot(X, reg.predict(X), color='red', linewidth=3)
+    ax.scatter(x, y, color='black')
+    ax.plot(x, reg.predict(x), color='red', linewidth=3)
     ax.grid(True,
             axis='both',
             zorder=0,
@@ -83,19 +82,19 @@ def linear_regression_intro():
     # Plotting Models With or Without Intercept
     # Model with Intercept (like earlier in notebook)
     reg_inter = LinearRegression(fit_intercept=True)
-    reg_inter.fit(X, y)
-    predictions_inter = reg_inter.predict(X)
-    score_inter = reg_inter.score(X, y)
+    reg_inter.fit(x, y)
+    predictions_inter = reg_inter.predict(x)
+    score_inter = reg_inter.score(x, y)
 
-    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 7));
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 7))
 
     for index, model in enumerate([LinearRegression(fit_intercept=True), LinearRegression(fit_intercept=False)]):
-        model.fit(X, y)
-        predictions = model.predict(X)
-        score = model.score(X, y)
+        model.fit(x, y)
+        predictions = model.predict(x)
+        score = model.score(x, y)
 
-        ax[index].scatter(X, y, color='black');
-        ax[index].plot(X, model.predict(X), color='red', linewidth=3);
+        ax[index].scatter(x, y, color='black')
+        ax[index].plot(x, model.predict(x), color='red', linewidth=3)
 
         ax[index].tick_params(labelsize=18)
         ax[index].set_xlabel('x', fontsize=18)
@@ -116,64 +115,61 @@ def train_split_tutorial():
     # data preparation
     features = list(zoo_data_df.columns[:-1])
     target = zoo_data_df.columns[-1]
-    X = pd.get_dummies(zoo_data_df.loc[:, features])
+    x = pd.get_dummies(zoo_data_df.loc[:, features])
 
     # X = zoo_data_df.loc[:, features]
     y = zoo_data_df.loc[:, [target]]
 
     # split the data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=324)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=324)
 
     # create the model regression classifier
     lg = KNeighborsClassifier()
-    lg.fit(X_train, y_train)
+    lg.fit(x_train, y_train)
 
     # measure the performance
-    score = round(lg.score(X_test.values, y_test.values), 2)
+    score = round(lg.score(x_test.values, y_test.values), 2)
     print('Current score: ', score, ' %')
 
     # make predictions
-    predicted_row = X_test.iloc[0, :]
+    predicted_row = x_test.iloc[0, :]
     once_prediction = lg.predict(predicted_row.values.reshape(1, -1))
     print('Predicted eatable: ', once_prediction)
     predicted_row['eatable'] = once_prediction[0]
     print(predicted_row)
     predicted_df = pd.DataFrame(predicted_row).T
-    reversed = pd.from_dummies(predicted_df, sep='animal_name').rename(columns={'': 'animal_name'})
-    print(reversed)
+    reversed_predicted = pd.from_dummies(predicted_df, sep='animal_name').rename(columns={'': 'animal_name'})
+    print(reversed_predicted)
 
 
 def regression_w_scaler():
     iris_data = load_iris()
     iris_df = pd.DataFrame(iris_data.data, columns=iris_data.feature_names)
     iris_df['species'] = iris_data.target
-    # X_train, X_test, y_train, y_test = train_test_split(iris_df.iloc[:, :-1], iris_df.iloc[:, -1],
-    #                                                     random_state=324)
-    X_train, X_test, y_train, y_test = train_test_split(iris_df[['petal length (cm)']], iris_df['species'],
+
+    x_train, x_test, y_train, y_test = train_test_split(iris_df[['petal length (cm)']], iris_df['species'],
                                                         random_state=0)
-    # create scaler object
-    # TODO: Investigate StandardScaler
     scaler = StandardScaler()
 
     # fit and transform the data
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    x_train_scaled = scaler.fit_transform(x_train)
+    x_test_scaled = scaler.transform(x_test)
 
     # create the model regression classifier
     lg = LinearRegression()
-    lg.fit(X_train_scaled, y_train)
+    lg.fit(x_train_scaled, y_train)
 
     # observable pental length is the most important feature
-    observable = X_test_scaled[0].reshape(1, -1)
+    observable = x_test_scaled[0].reshape(1, -1)
     actual = y_test.iloc[0]
 
     print('prediction', lg.predict(observable)[0])
     print('actual', actual)
 
     example_df = pd.DataFrame()
-    example_df.loc[:, 'petal length (cm)'] = X_test_scaled.reshape(-1)
+    example_df.loc[:, 'petal length (cm)'] = x_test_scaled.reshape(-1)
     example_df.loc[:, 'species'] = y_test.values
-    example_df['logistic_predicted'] = pd.DataFrame(lg.predict(X_test_scaled))
+    example_df['logistic_predicted'] = pd.DataFrame(lg.predict(x_test_scaled))
 
     print(example_df.head())
 
@@ -210,31 +206,31 @@ def regression_w_scaler():
     fig.tight_layout()
     plt.show()
 
-def get_splited_data():
+
+def get_split_data():
     iris_data = load_iris()
     iris_df = pd.DataFrame(iris_data.data, columns=iris_data.feature_names)
     iris_df['species'] = iris_data.target
-    X_train, X_test, y_train, y_test = train_test_split(iris_df[['petal length (cm)']], iris_df['species'],
+    x_train, x_test, y_train, y_test = train_test_split(iris_df[['petal length (cm)']], iris_df['species'],
                                                         random_state=0)
     scaler = StandardScaler()
 
     # fit and transform the data
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-    return X_train_scaled, X_test_scaled, y_train, y_test
-
+    x_train_scaled = scaler.fit_transform(x_train)
+    x_test_scaled = scaler.transform(x_test)
+    return x_train_scaled, x_test_scaled, y_train, y_test
 
 
 def measuring_w_performance():
     # Measuring Model Performance
-    X_train_scaled, X_test_scaled, y_train, y_test = get_splited_data()
+    x_train_scaled, x_test_scaled, y_train, y_test = get_split_data()
 
     lg = LinearRegression()
-    lg.fit(X_train_scaled, y_train)
-    score = lg.score(X_test_scaled, y_test)
+    lg.fit(x_train_scaled, y_train)
+    score = lg.score(x_test_scaled, y_test)
 
     y_test = y_test.values.reshape(-1, 1)
-    cm = metrics.confusion_matrix(y_test, lg.predict(X_test_scaled))
+    cm = metrics.confusion_matrix(y_test, lg.predict(x_test_scaled))
 
     plt.figure(figsize=(9, 9))
 
