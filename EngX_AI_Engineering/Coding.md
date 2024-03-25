@@ -675,3 +675,253 @@ public class Error {
 Now, the method should correctly calculate the sum of the numbers in the array without encountering the ArrayIndexOutOfBoundsException error.
 ```
 
+### Refactoring Code
+
+- Focus on a Specific Concern ( duplication, complexity, etc.)
+- Request Comparisons (ask to compare them in the context of your specific codebase)
+- Simplify Complex Prompts (If you have a complex refactoring problem, break it down into smaller, more focused prompts)
+
+
+#### Identifying Code Smells
+
+- Task: 
+```java
+// Suppose you are asked to find code smells in the following code snippet:
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+} 
+```
+
+- Prompt:
+```java
+// Please review the following code snippet written in Java and identify any code smells or areas that might need refactoring. This code is part of a web application and is responsible for calculating the price of an order, including discounts and taxes. Let me know if you need any additional context.
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+}
+```
+
+- Output:
+```java
+// Here are some code smells and areas that might need refactoring:
+
+// Magic strings: The strings "regular" and "premium" are hardcoded in the method. It would be better to use constants or an enumeration for user types.
+// The method does too much: The method is responsible for calculating the total price, applying discounts, and applying taxes. It would be better to break this method into smaller methods, each with a single responsibility.
+// The discount calculation is not extensible: If more user types or discount rules are added in the future, the current if-else structure will become more complex and harder to maintain. Consider using a more extensible design like the Strategy pattern to handle different discount rules.
+// The method signature is not self-explanatory: The 'userType' parameter is a string, which does not provide any information about the possible values it can take. Consider using an enumeration for user types to make the code more readable and less error-prone.
+// Here's a refactored version of the code:
+
+java 
+public enum UserType { 
+    REGULAR, PREMIUM, GUEST 
+} 
+
+public double calculateOrderPrice(List<Item> items, UserType userType, double taxRate) { 
+    double totalPrice = calculateTotalPrice(items); 
+    double discount = calculateDiscount(userType); 
+    double discountedPrice = applyDiscount(totalPrice, discount); 
+    double finalPrice = applyTax(discountedPrice, taxRate); 
+    return finalPrice; 
+} 
+
+private double calculateTotalPrice(List<Item> items) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+    return totalPrice; 
+} 
+
+private double calculateDiscount(UserType userType) { 
+    switch (userType) { 
+        case REGULAR: 
+            return 0.05; 
+        case PREMIUM: 
+            return 0.1; 
+        default: 
+            return 0; 
+    } 
+} 
+
+private double applyDiscount(double price, double discount) { 
+    return price * (1 - discount); 
+} 
+
+private double applyTax(double price, double taxRate) { 
+    return price * (1 + taxRate); 
+}
+// This refactored version uses an enumeration for user types, breaks the method into smaller methods with single responsibilities, and makes the code more readable and maintainable.
+```
+
+#### When using AI conversational tools to find code smells in your code snippets, keep in mind the following:
+- Provide Well-Formatted Code - Ensure that the code snippet you provide is formatted and indented properly. This makes the code easier to read and analyze.
+- Focus on Smaller Code Snippets - Break code down into smaller parts and ask ChatGPT to review them individually.
+
+
+### Refactoring Plan
+
+- Task:
+```java
+
+Suppose you are continuing to work with code from the previous task. After identifying the code smells, you are assigned the task of creating a refactoring plan.
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+} 
+```
+
+- Prompt:
+```java
+I have identified the following code smells in my Java code and would like your help creating a refactoring plan to address these issues: magic strings, the method does too much, the discount calculation is not extensible, and the method signature is not self-explanatory. This code is part of a web application and is responsible for calculating the price of an order, including discounts and taxes. Let me know if you need any additional context. Here's a sample code snippet for reference:
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+}
+Please suggest a step-by-step refactoring plan, including appropriate techniques or design patterns, and any additional considerations for ensuring a safe and effective refactoring process.
+```
+
+- Output:
+```java
+Here's a step-by-step refactoring plan to address the code smells you've identified:
+
+Replace magic strings with constants or enums:
+
+Replace the "regular" and "premium" strings with constants or an enum called 'UserType'. This will make the code more readable and less error-prone.
+Extract methods to break down the method that does too much:
+
+Extract the discount calculation into a separate method called 'calculateDiscount'.
+Extract the tax calculation into a separate method called 'calculateTax'.
+Extract the total price calculation into a separate method called 'calculateTotalPrice'.
+Make the discount calculation extensible:
+
+Create an interface called 'DiscountStrategy' with a method called 'calculateDiscount'.
+Implement the interface in separate classes for each user type, e.g., 'RegularUserDiscountStrategy' and 'PremiumUserDiscountStrategy'.
+Use the Strategy pattern to select the appropriate discount strategy based on the user type.
+Improve the method signature:
+
+Change the method signature to accept the 'UserType' enum instead of a string.
+Update the method name to 'calculateFinalOrderPrice' for better clarity.
+Ensure a safe and effective refactoring process:
+
+Write unit tests to cover the existing functionality before refactoring.
+Refactor the code incrementally, running the tests after each change to ensure the functionality remains intact.
+Use an IDE with refactoring support to minimize the risk of introducing errors during refactoring.
+Here's the refactored code snippet:
+
+```java 
+public enum UserType { 
+    REGULAR, PREMIUM 
+} 
+
+public interface DiscountStrategy { 
+    double calculateDiscount(double totalPrice); 
+} 
+
+public class RegularUserDiscountStrategy implements DiscountStrategy { 
+    @Override 
+    public double calculateDiscount(double totalPrice) { 
+        return totalPrice * 0.05; 
+    } 
+} 
+
+public class PremiumUserDiscountStrategy implements DiscountStrategy { 
+    @Override 
+    public double calculateDiscount(double totalPrice) { 
+        return totalPrice * 0.1; 
+    } 
+} 
+
+public double calculateFinalOrderPrice(List<Item> items, UserType userType, double taxRate) { 
+    double totalPrice = calculateTotalPrice(items); 
+    double discount = calculateDiscount(totalPrice, userType); 
+    double finalPrice = calculateTax(totalPrice - discount, taxRate); 
+    return finalPrice; 
+} 
+
+private double calculateTotalPrice(List<Item> items) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+    return totalPrice; 
+} 
+
+private double calculateDiscount(double totalPrice, UserType userType) { 
+    DiscountStrategy discountStrategy; 
+    if (userType == UserType.REGULAR) { 
+        discountStrategy = new RegularUserDiscountStrategy(); 
+    } else { 
+        discountStrategy = new PremiumUserDiscountStrategy(); 
+    } 
+    return discountStrategy.calculateDiscount(totalPrice); 
+} 
+
+private double calculateTax(double price, double taxRate) { 
+    return price * (1 + taxRate); 
+} 
+```
