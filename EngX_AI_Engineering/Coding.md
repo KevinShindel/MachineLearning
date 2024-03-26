@@ -796,7 +796,7 @@ private double applyTax(double price, double taxRate) {
 - Task:
 ```java
 
-Suppose you are continuing to work with code from the previous task. After identifying the code smells, you are assigned the task of creating a refactoring plan.
+// Suppose you are continuing to work with code from the previous task. After identifying the code smells, you are assigned the task of creating a refactoring plan.
 
 public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
     double totalPrice = 0; 
@@ -821,7 +821,12 @@ public double calculateOrderPrice(List<Item> items, String userType, double taxR
 
 - Prompt:
 ```java
-I have identified the following code smells in my Java code and would like your help creating a refactoring plan to address these issues: magic strings, the method does too much, the discount calculation is not extensible, and the method signature is not self-explanatory. This code is part of a web application and is responsible for calculating the price of an order, including discounts and taxes. Let me know if you need any additional context. Here's a sample code snippet for reference:
+I have identified the following code smells in my Java code and would like your help creating 
+a refactoring plan to address these issues: magic strings, the method does too much, 
+the discount calculation is not extensible, and the method signature is not self-explanatory.
+ This code is part of a web application and is responsible for calculating the price of an order,
+  including discounts and taxes. Let me know if you need any additional context.
+   Here's a sample code snippet for reference:
 
 public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
     double totalPrice = 0; 
@@ -925,3 +930,231 @@ private double calculateTax(double price, double taxRate) {
     return price * (1 + taxRate); 
 } 
 ```
+### Simple Refactoring
+
+- Task:
+```java
+Suppose you are asked to implement the refactoring plan above step by step. According to the plan, one of the steps is to extract the discount calculation into a separate method called 'calculateDiscount'.
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+} 
+```
+
+- Prompt:
+```java
+Refactor the following Java code snippet, which is part of a web application and is responsible for calculating the price of an order, including discounts and taxes. The main goal of refactoring is to extract the discount calculation into a separate method called 'calculateDiscount'. Provide a brief explanation for each step.
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+}
+```
+
+- Output:
+```java
+Step 1: Extract the discount calculation into a separate method called 'calculateDiscount'.
+
+java 
+private double calculateDiscount(String userType) { 
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+    return discount; 
+} 
+Step 2: Replace the discount calculation in the 'calculateOrderPrice' method with a call to the new 'calculateDiscount' method.
+
+java 
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount = calculateDiscount(userType); 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+}
+Explanation:
+
+1. We extracted the discount calculation into a separate method called 'calculateDiscount'. This method takes the 'userType' as a parameter and returns the discount value. This makes the code more modular and easier to maintain.
+2. We replaced the discount calculation in the 'calculateOrderPrice' method with a call to the new 'calculateDiscount' method. This simplifies the 'calculateOrderPrice' method and makes it easier to read and understand.
+```
+
+### Complex Refactoring
+
+- Task:
+```java
+
+Suppose you are continuing to implement the refactoring plan above. Some improvements can't be made using refactoring techniques. Your next task is to use the strategy pattern to select the appropriate discount strategy based on the type of user.
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+} 
+```
+
+- Prompt:
+```java
+Refactor the following Java code snippet, which is part of a web application, and is responsible for calculating the price of an order, including discounts and taxes. The main goal of refactoring is to use the strategy pattern to select the appropriate discount strategy based on the type of user.
+
+Please address this goal and provide a step-by-step guide on how to refactor the code using the suggested design pattern(s), including any additional considerations for ensuring a safe and effective refactoring process.
+
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    double discount; 
+    if (userType.equals("regular")) { 
+        discount = 0.05; 
+    } else if (userType.equals("premium")) { 
+        discount = 0.1; 
+    } else { 
+        discount = 0; 
+    } 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+}
+```
+
+- Output:
+
+Step 1
+
++ Define a DiscountStrategy interface
++ Create an interface called DiscountStrategy with a single method called getDiscount() that returns a double.
+
+```java 
+public interface DiscountStrategy { 
+    double getDiscount(); 
+} 
+```
+
+Step 2
+
++ Implement concrete DiscountStrategy classes
++ Create concrete classes for each user type that implement the DiscountStrategy interface. In this case, we have RegularUserDiscountStrategy, PremiumUserDiscountStrategy, and NoDiscountStrategy.
+
+```java 
+public class RegularUserDiscountStrategy implements DiscountStrategy { 
+    @Override 
+    public double getDiscount() { 
+        return 0.05; 
+    } 
+} 
+
+public class PremiumUserDiscountStrategy implements DiscountStrategy { 
+    @Override 
+    public double getDiscount() { 
+        return 0.1; 
+    } 
+} 
+
+public class NoDiscountStrategy implements DiscountStrategy { 
+    @Override 
+    public double getDiscount() { 
+        return 0; 
+    } 
+}
+```
+Step 3
+
++ Create a DiscountStrategyFactory
++ Create a factory class that returns the appropriate DiscountStrategy instance based on the user type.
+
+```java 
+public class DiscountStrategyFactory { 
+    public static DiscountStrategy getDiscountStrategy(String userType) { 
+        if (userType.equals("regular")) { 
+            return new RegularUserDiscountStrategy(); 
+        } else if (userType.equals("premium")) { 
+            return new PremiumUserDiscountStrategy(); 
+        } else { 
+            return new NoDiscountStrategy(); 
+        } 
+    } 
+}
+``` 
+Step 4: 
+
++ Refactor the calculateOrderPrice method
++ Modify the calculateOrderPrice method to use the DiscountStrategyFactory to get the appropriate discount strategy based on the user type. Then, use the getDiscount() method from the DiscountStrategy instance to calculate the discount.
+
+```java 
+public double calculateOrderPrice(List<Item> items, String userType, double taxRate) { 
+    double totalPrice = 0; 
+    for (Item item : items) { 
+        totalPrice += item.getPrice() * item.getQuantity(); 
+    } 
+
+    DiscountStrategy discountStrategy = DiscountStrategyFactory.getDiscountStrategy(userType); 
+    double discount = discountStrategy.getDiscount(); 
+
+    double discountedPrice = totalPrice * (1 - discount); 
+    double finalPrice = discountedPrice * (1 + taxRate); 
+    return finalPrice; 
+}
+```
+
+Additional considerations
+
+1. Make sure to update any unit tests to reflect the changes in the code.
+2. Consider using dependency injection to provide the DiscountStrategyFactory to the class containing the calculateOrderPrice method, making it easier to swap out the factory implementation if needed.
+3. If there are more user types in the future, you can simply create new DiscountStrategy implementations and update the DiscountStrategyFactory without modifying the calculateOrderPrice method.
