@@ -3,7 +3,7 @@ from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.ml.feature import VectorAssembler, StringIndexer, IndexToString
 from pyspark.mllib.evaluation import MulticlassMetrics
 
-from sparkml_examples.service import create_spark
+from SparkML.service import create_spark
 
 
 def main():

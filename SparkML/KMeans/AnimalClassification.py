@@ -2,7 +2,7 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.clustering import KMeans
 from pyspark.ml.evaluation import ClusteringEvaluator
 
-from sparkml_examples.service import create_spark
+from SparkML.service import create_spark
 
 
 def main():
