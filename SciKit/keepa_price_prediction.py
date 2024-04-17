@@ -49,15 +49,22 @@ def main():
          ts_markersize=3,
          anomaly_markersize=5,
          anomaly_color='red',
-         anomaly_tag="marker")
+         anomaly_tag="marker"
+         )
     plt.show()
 
     outlier_detector = OutlierDetector(LocalOutlierFactor(contamination=0.05))
     od_anomalies = outlier_detector.fit_detect(df)
     od_anomalies = od_anomalies.to_frame(name='Y')
 
-    plot(df, anomaly=od_anomalies, ts_linewidth=2, ts_markersize=3,
-         anomaly_markersize=5, anomaly_color='red', anomaly_tag='marker', ts_alpha=0.3, curve_group='all')
+    plot(df, anomaly=od_anomalies,
+         ts_linewidth=2,
+         ts_markersize=3,
+         anomaly_markersize=5,
+         anomaly_color='red',
+         anomaly_tag='marker',
+         ts_alpha=0.3,
+         curve_group='all')
     plt.show()
 
     seasonal(data=df)
