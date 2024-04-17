@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
 # import seaborn as sns
 
 if __name__ == '__main__':
@@ -21,13 +22,12 @@ if __name__ == '__main__':
     min_val = temperature_df['avg_anomaly_temp'].min()
     max_val = temperature_df['avg_anomaly_temp'].max()
 
-    temperature_df['avg_anomaly_temp'] = (temperature_df['avg_anomaly_temp'] - min_val) / (max_val -
-                                                                                   min_val)
+    temperature_df['avg_anomaly_temp'] = (temperature_df['avg_anomaly_temp'] - min_val) / (max_val - min_val)
 
     # calculate linear relation for insurance rate
     temperature_df['anomaly_coeff'] = np.nan
     temperature_df.loc[temperature_df.index.year == MAX_YEAR, 'anomaly_coeff'] = temperature_df.loc[
-        temperature_df.index.year == MAX_YEAR, 'avg_anomaly_temp'] / CURRENT_RATE
+                                                                                     temperature_df.index.year == MAX_YEAR, 'avg_anomaly_temp'] / CURRENT_RATE
 
     # get anomaly coefficient
     ANOMALLY_COEFF = temperature_df.loc[temperature_df.index.year == MAX_YEAR, 'anomaly_coeff'].values[0]
@@ -42,9 +42,7 @@ if __name__ == '__main__':
     plt.show()
 
     # Read C02 data
-    c02_df = pd.read_csv('../dataset/co2_emission.csv',
-                          index_col='year',
-                          parse_dates=True)
+    c02_df = pd.read_csv('../dataset/co2_emission.csv', index_col='year', parse_dates=True)
 
     MAX_YEAR = c02_df.index.max().year
 
@@ -55,7 +53,7 @@ if __name__ == '__main__':
     # calculate linear relation for insurance rate
     c02_df['anomaly_coeff'] = np.nan
     c02_df.loc[c02_df.index.year == MAX_YEAR, 'anomaly_coeff'] = c02_df.loc[
-        c02_df.index.year == MAX_YEAR, 'emissions'] / CURRENT_RATE
+                                                                     c02_df.index.year == MAX_YEAR, 'emissions'] / CURRENT_RATE
 
     # get anomaly coefficient
     ANOMALLY_COEFF = c02_df.loc[c02_df.index.year == MAX_YEAR, 'anomaly_coeff'].values[0]
@@ -91,7 +89,7 @@ if __name__ == '__main__':
     # create disaster startdate from year, month and day columns
     start_df = disaster_df[['Start Year', 'Start Month', 'Start Day']].rename({'Start Year': 'year',
                                                                                'Start Month': 'month',
-                                                                              'Start Day': 'day'}, axis=1)
+                                                                               'Start Day': 'day'}, axis=1)
     # convert floats to integers
     start_df = start_df.astype(int)
     disaster_df['start_date'] = pd.to_datetime(start_df[['year', 'month', 'day']], format='%Y-%m-%d')
