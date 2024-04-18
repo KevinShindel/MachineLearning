@@ -27,7 +27,8 @@ if __name__ == '__main__':
     # calculate linear relation for insurance rate
     temperature_df['anomaly_coeff'] = np.nan
     temperature_df.loc[temperature_df.index.year == MAX_YEAR, 'anomaly_coeff'] = temperature_df.loc[
-                                                                                     temperature_df.index.year == MAX_YEAR, 'avg_anomaly_temp'] / CURRENT_RATE
+                                                                                     temperature_df.index.year == MAX_YEAR,
+                                                                                     'avg_anomaly_temp'] / CURRENT_RATE
 
     # get anomaly coefficient
     ANOMALLY_COEFF = temperature_df.loc[temperature_df.index.year == MAX_YEAR, 'anomaly_coeff'].values[0]
