@@ -1,3 +1,12 @@
+"""
+Author: Kevin Shindel
+Date: 2024-18-04
+
+Description: This script is used to forecast the temperature anomaly and CO2 emissions for the years 2024-2028.
+The script uses the Holt-Winters Exponential Smoothing model to forecast the temperature anomaly and CO2 emissions.
+The script also calculates the insurance rate for each year based on the temperature anomaly.
+"""
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import mean_squared_error
