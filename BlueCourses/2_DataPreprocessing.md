@@ -27,16 +27,6 @@
 - - Trade-off many data versus recent data
 - Sample taken must be from normal business period to get  as accurate a picture as possible of target population
 
-## Undersampling:
-- Good customers in trading set are removed
-
-## Oversampling:
-- Bad customers in trading set are duplicated
-
-## Trial and error to determine optimal odds for under and over-sampling
-## Depend on analytical technique used (logistic regression, decision tree, neural network, etc.)
-
-
 Example of original data table:
 
 | ID | Age | Income | Savings | CreditScore | Default |
@@ -47,6 +37,10 @@ Example of original data table:
 | 4  | 55  | 150000 | 40000   | 900         | 1       |
 | 5  | 65  | 200000 | 50000   | 1000        | 1       |
 
+
+## Under-sampling:
+- Good customers in trading set are removed
+
 Example of Under-sampled data table (data loss):
 
 | ID | Age | Income | Savings | CreditScore | Default |
@@ -55,6 +49,9 @@ Example of Under-sampled data table (data loss):
 | 3  | 45  | 100000 | 30000   | 800         | 1       |
 | 5  | 65  | 200000 | 50000   | 1000        | 1       |
 | 9  | 25  | 50000  | 10000   | 600         | 0       |
+
+## Oversampling:
+- Bad customers in trading set are duplicated
 
 Example of Oversampled data table (data duplication):
 
@@ -67,6 +64,34 @@ Example of Oversampled data table (data duplication):
 | 3  | 45  | 100000 | 30000   | 800         | 1       |
 | 5  | 65  | 200000 | 50000   | 1000        | 1       |
 | 5  | 65  | 200000 | 50000   | 1000        | 1       |
+
+## Trial and error to determine optimal odds for under and over-sampling
+
+### Determine optimal odds for under and over-sampling example:
+```python
+import pandas as pd
+
+# Read data from CSV file
+hmeq = pd.read_csv("hmeq.csv")
+
+# Count number of good and bad customers
+good = hmeq[hmeq["BAD"] == 0].shape[0]
+bad = hmeq[hmeq["BAD"] == 1].shape[0]
+
+# Determine optimal odds for under and over-sampling
+odds = good / bad
+
+# Under-sampling
+under_sample = hmeq[hmeq["BAD"] == 0].sample(n=bad, replace=False)
+
+# Over-sampling
+over_sample = hmeq[hmeq["BAD"] == 1].sample(n=good, replace=True)
+
+# Combine under and over-sampled data
+sample = pd.concat([under_sample, over_sample], axis=0)
+```
+
+## Depend on analytical technique used (logistic regression, decision tree, neural network, etc.)
 
 ### SMOTE technique: Synthetic Minority Over-sampling Technique
 
@@ -142,7 +167,7 @@ plt.show()
 
 ## Missing Values
 
-### Dataset with missing values
+### Example of Dataset with missing values
 
 | ID | Age| Income | Marital Status | Credit Score | Class |
 |----|----|--------|----------------|--------------|-------|
@@ -157,12 +182,12 @@ plt.show()
 | 9  | 105| 400000 | Married        | 1400         | Bad   |
 | 10 | 115| 450000 | Divorced       | 1500         | Good  |
 
-# Reasons for missing values
+### Reasons for missing values
 - Non-applicable (default date not known fpr non defaulters)
 - Non disclosed (income not disclosed)
 - Error when merging data (data not available for some records)
 
-# Deal with missing values
+### Deal with missing values
 - Keep
 - - Fact that data is missing can indicate pattern
 - - Add additional category for missing value
