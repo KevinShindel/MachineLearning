@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing, HoltWintersResults
 
-from SciKit.utils import adjust_model
+from SciKit.italy.utils import adjust_model
 
 MAX_PREDICTION = 4
 
@@ -41,7 +41,7 @@ def create_model(df: pd.DataFrame) -> HoltWintersResults:
 
 def load_data() -> pd.DataFrame:
     # this function will load the data
-    df = pd.read_csv('../dataset/ItalyDisastersDB_1900_2024.csv',
+    df = pd.read_csv('../../dataset/ItalyDisastersDB_1900_2024.csv',
                      usecols=['Start Year', "Total Damage, Adjusted ('000 US$)"],
                      index_col='Start Year')
 

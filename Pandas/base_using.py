@@ -1,3 +1,36 @@
+from collections import defaultdict
+
+
+def dict_inclusion(fruits: list[str]) -> dict[str, list[str]]:
+
+    by_letter = {}
+
+    for fruit in fruits:
+        letter = fruit[0]
+        if letter not in by_letter:
+            by_letter[letter] = [fruit]
+        else:
+            by_letter[letter].append(fruit)
+
+    return by_letter
+
+
+def dict_inclusion_defaultdict(fruits: list[str]) -> dict[str, list[str]]:
+        by_letter = defaultdict(list)
+
+        for fruit in fruits:
+            by_letter[fruit[0]].append(fruit)
+
+        return by_letter
+
+
+def dict_inclusion_setdefault(fruits: list[str]) -> dict[str, list[str]]:
+    by_letter = {}
+
+    for fruit in fruits:
+        by_letter.setdefault(fruit[0], []).append(fruit)
+
+    return by_letter
 
 if __name__ == '__main__':
 
@@ -15,34 +48,7 @@ if __name__ == '__main__':
     # work with dictionary (sort by first letter)
     fruits = ['apple', 'banana', 'cherry', 'pineapple', 'mango']
 
-    by_letter = {}
 
-    for fruit in fruits:
-        letter = fruit[0]
-        if letter not in by_letter:
-            by_letter[letter] = [fruit]
-        else:
-            by_letter[letter].append(fruit)
-
-    print(by_letter)
-
-    # using setdefault
-    by_letter = {}
-
-    for fruit in fruits:
-        by_letter.setdefault(fruit[0], []).append(fruit)
-
-    print(by_letter)
-
-    # using defaultdict
-    from collections import defaultdict
-
-    by_letter = defaultdict(list)
-
-    for fruit in fruits:
-        by_letter[fruit[0]].append(fruit)
-
-    print(by_letter)
 
     # working with set
     a = {1, 2, 3, 4, 5}
