@@ -14,19 +14,17 @@ def main():
     price_col = 'buybox_price'
 
     sns.set(style="darkgrid")
-    df = read_csv('../dataset/keepa_data.csv',
+    df = read_csv('../dataset/keepa_data.zip',
                   index_col=['date_at'],
                   parse_dates=True,
                   usecols=['date_at', 'buybox_price'])
-
-    df = df[df.index.year < 2021]
 
     sns.lineplot(data=df, x=df.index, y=price_col)
     df.hist()
     plt.show()
 
     # resample to daily
-    df = df.resample('D').max()
+    df_resampled = df.resample('D').max()
     df[df[price_col] == 0] = np.nan
     df = df.fillna(method='ffill')
 

@@ -36,18 +36,27 @@ def forecast_warming():
     mse = mean_squared_error(test, predictions)
     print(f'Mean Squared Error: {mse}')
 
-    # Forecast the temperature for 2024-2028
-    test = df.loc['2023':, 'avg_anomaly_temp']
-    test.plot(label='Real')
-    forecast = model.predict(start='2023', end='2028')
+    # Plot test data vs forecasted data
+    test_forecast = model.predict(start='1860', end='2022')
+    df.plot(label='Real')
+    test_forecast.plot(label='Forecasted')
+    plt.ylabel('Emission')
+    plt.xlabel('Year')
+    plt.title('Global warming anomaly Forecasted vs Real from 1860 to 2022')
+    plt.legend()
+    plt.show()
 
+
+    forecast = model.predict(start='2024', end='2028')
     # Plot the forecasted data
+    df['2020':'2024'].plot(label='Real')
     forecast.plot(label='Forecasted')
     plt.xlabel('Year')
     plt.ylabel('Temperature Anomaly')
-    plt.title('Global warming anomaly Real and Forecasted for 2023-2028')
+    plt.title('Global warming anomaly Forecasted for 2023-2028')
     plt.legend()
     plt.show()
+
 
     forecasted_df = pd.DataFrame(forecast,
                                  columns=['avg_anomaly_temp'],
@@ -79,9 +88,9 @@ def forecast_emissions():
     # Plot test data vs forecasted data
     df.plot(label='Real')
     test_forecast.plot(label='Forecasted')
-    plt.ylabel('Emission Index')
+    plt.ylabel('Emission')
     plt.xlabel('Year')
-    plt.title('CO2 Emissions Predicted vs Real data from 1860 to 2022')
+    plt.title('CO2 emission Predicted vs Real from 1860 to 2022')
     plt.legend()
     plt.show()
 
@@ -89,24 +98,8 @@ def forecast_emissions():
     df['2020':'2022'].plot(label='Real')
     forecast.plot(label='Forecasted')
     plt.xlabel('Year')
-    plt.ylabel('CO2 Emissions')
-    plt.title('CO2 Emissions Real and Forecasted from 2020 to 2028')
-    plt.legend()
-    plt.show()
-
-    # Compare real data with forecasted data via plot
-    start = str(df.index.year.min())
-    end = str(df.index.year.max())
-    predicted = model.predict(start=start, end=end)
-
-    predicted = pd.DataFrame(predicted, columns=['emissions'])
-    predicted.index.name = 'year'
-
-    predicted['emissions'].plot(label='Forecasted', ylabel='CO2 Emissions', xlabel='Year')
-    df['emissions'].plot(label='Real', ylabel='CO2 Emissions', xlabel='Year')
-    plt.xlabel('Year')
-    plt.ylabel('C02 Emissions')
-    plt.title('C02 Emissions Forecast vs Real for 1860-2022')
+    plt.ylabel('Emission')
+    plt.title('CO2 emission Real and Forecasted from 2020 to 2028')
     plt.legend()
     plt.show()
 
@@ -171,7 +164,7 @@ def forecast_claims(e_df=None, w_df=None):
     plt.xlabel('Year')
     plt.ylabel('Gross Index')
     plt.legend()
-    plt.title('Gross Index Forecast vs Real for 2004-2020')
+    plt.title('Gross claims expenditure in Italy Forecast vs Real for 2004-2020')
     plt.show()
 
     # Forecast the gross for 2016-2020
@@ -188,7 +181,7 @@ def forecast_claims(e_df=None, w_df=None):
     forecast.plot(label='Forecasted Gross')
     plt.xlabel('Year')
     plt.ylabel('Gross Index')
-    plt.title('Predicted Gross Index from 2021 to 2028 years (m EUR)')
+    plt.title('Predicted Gross claims expenditure in Italy from 2021 to 2028 years (m EUR)')
     plt.legend()
     plt.show()
 
