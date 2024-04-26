@@ -15,6 +15,8 @@ import seaborn as sns
 import warnings
 
 warnings.filterwarnings('ignore')
+sns.set(style="darkgrid")
+
 
 
 def forecast_warming():
@@ -34,29 +36,30 @@ def forecast_warming():
     test = df.loc['2020':'2024', 'avg_anomaly_temp']
     predictions = model.predict(start='2020', end='2024')
     mse = mean_squared_error(test, predictions)
-    print(f'Mean Squared Error: {mse}')
+    print(f'Mean Squared Error for Warming Predictor: {mse}')
 
     # 3. Plot test data vs forecasted data
     test_forecast = model.predict(start='1860', end='2022')
-    df.plot(label='Real Warming')
+
+    df['avg_anomaly_temp'].plot(label='Real Warming')
     test_forecast.plot(label='Predicted Warming')
     plt.ylabel('Temperature Anomaly in Celsius')
     plt.xlabel('Year')
-    plt.title('Global warming anomaly Predicted vs Real from 1860 to 2022')
+    plt.title('Italy Global Warming Anomaly Predicted vs Real 1860 – 2022')
     plt.legend()
+    plt.savefig('Italy_3.png', dpi=500)
     plt.show()
 
     # 4. Plot the forecasted data
     forecast = model.predict(start='2024', end='2028')
-    df['2020':'2024'].plot(label='Real Warming')
-    forecast.plot(label='predicted Warming')
+    df['2020':'2024']['avg_anomaly_temp'].plot(label='Real Warming')
+    forecast.plot(label='Predicted Warming')
     plt.xlabel('Year')
     plt.ylabel('Temperature Anomaly in Celsius')
-    plt.title('Global warming anomaly Real and Predicted for 2023-2028')
+    plt.title('Italy Global Warming Anomaly Predicted vs Real 2023 – 2028')
     plt.legend()
+    plt.savefig('Italy_4.png', dpi=500)
     plt.show()
-
-
     forecasted_df = pd.DataFrame(forecast,
                                  columns=['avg_anomaly_temp'],
                                  )
@@ -82,24 +85,28 @@ def forecast_emissions():
 
     # Calculate the mean squared error
     mse = mean_squared_error(df, test_forecast)
-    print(f'Mean Squared Error: {mse}')
+    print(f'Mean Squared Error for Emission Predictor: {mse}')
 
     # 1. Plot test data vs forecasted data
-    df.plot(label='Real Emissions')
-    test_forecast.plot(label='Predicted Emissions')
+    sns.lineplot(df['emissions'], label='Real Emissions')
+    sns.lineplot(test_forecast, label='Predicted Emissions')
+    # df['emissions'].plot(label='Real Emissions')
+    # test_forecast.plot(label='Predicted Emissions')
     plt.ylabel('Emission')
     plt.xlabel('Year')
-    plt.title('CO2 emission Predicted vs Real from 1860 to 2022')
+    plt.title('Italy CO2 Emissions: Predicted vs Real 1860 - 2022')
     plt.legend()
+    plt.savefig('Italy_1.png', dpi=500)
     plt.show()
 
     # 2. Create plot with real data and forecasted data
-    df['2020':'2022'].plot(label='Real Emissions')
+    df['2020':'2022']['emissions'].plot(label='Real Emissions')
     forecast.plot(label='Predicted Emissions')
     plt.xlabel('Year')
     plt.ylabel('Emission')
-    plt.title('CO2 emission Real and Forecasted from 2020 to 2028')
+    plt.title('Italy CO2 Emissions: Predicted vs Real 2020 - 2028')
     plt.legend()
+    plt.savefig('Italy_2.png', dpi=500)
     plt.show()
 
     # union forecasted and real data
@@ -138,9 +145,10 @@ def forecast_claims(e_df=None, w_df=None):
 
     # 6. Correlation matrix heatmap between warming, emissions and gross
     sns.heatmap(all_in_df[['emissions', 'gross']].corr(), annot=True)
-    plt.title('Correlation between Gross index and Emissions for 2004 – 2020',
+    plt.title('Correlation of Gross Claims Expenditures to Emissions in Italy 2004 – 2020',
               x=0.6)
     plt.tight_layout()
+    plt.savefig('Italy_6.png', dpi=500)
     plt.show()
 
     # we found that correlation between emissions and gross index is negative, so we need cant predict gross index based on emissions and warming
@@ -160,13 +168,15 @@ def forecast_claims(e_df=None, w_df=None):
     gross_df = gross_df.to_frame()
 
     # 7. show plot forecasted vs real data
-    gross_df['gross'].plot(label='Real')
-    forecast['gross'].plot(label='Predicted')
+    gross_df['gross'].plot(label='Real Gross Claims')
+    forecast['gross'].plot(label='Predicted Gross Claims')
     plt.xlabel('Year')
     plt.ylabel('Gross Index')
     plt.legend()
-    plt.title('Gross claims expenditure in Italy Predicted vs Real for 2004-2020')
+    plt.title('Gross Claims Expenditures Predicted vs Real in Italy 2004 – 2020 (based on historical data)',
+              fontsize=9, x=0.4)
     plt.tight_layout()
+    plt.savefig('Italy_7.png', dpi=500)
     plt.show()
 
     # Forecast the gross for 2016-2020
@@ -174,19 +184,20 @@ def forecast_claims(e_df=None, w_df=None):
 
     # calc mse
     mse = mean_squared_error(x_test, forecast)
-    print(f'Mean Squared Error: {mse}')  #
+    print(f'Mean Squared Error for Gross Claims Predictor: {mse}')  #
 
     # Forecast the gross for 2021-2028
     forecast = model.predict(start='2021', end='2028')
 
     # 8. Plot the forecasted data
-    forecast.plot(label='Forecasted Gross')
+    forecast.plot(label='Predicted Gross Claims')
     plt.xlabel('Year')
-    plt.ylabel('Gross Index')
-    plt.title('Gross Claims Expenditures Predicted 2020 – 2028 based on the historical data of Gross Claims Expenditures 2004 – 2020',
-              fontsize=7, x=0.6)
+    plt.ylabel('Gross Claims Expenditures')
+    plt.title('Gross Claims Expenditures Predicted 2020 – 2028 (based on the historical data 2004 – 2020)',
+              fontsize=9, x=0.4)
     plt.legend()
     plt.tight_layout()
+    plt.savefig('Italy_8.png', dpi=500)
     plt.show()
 
 
@@ -207,9 +218,10 @@ if __name__ == '__main__':
 
     # 5. Correlation matrix heatmap between warming and emissions
     sns.heatmap(corr_matrix, annot=True)
-    plt.title('Correlation of Global Warming to Emissions in Italy for the 1860 – 2020 period',
+    plt.title('Correlation of Gross Claims Expenditures to Emissions in Italy 1860 – 2020',
               fontsize=11, x=0.6)
     plt.tight_layout()
+    plt.savefig('Italy_5.png', dpi=500)
     plt.show()
 
     forecast_claims(emission_df, warming_df)
