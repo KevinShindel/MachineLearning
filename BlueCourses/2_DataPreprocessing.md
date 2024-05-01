@@ -1,4 +1,5 @@
 ## Type of Variables
+
 - Continuous:
 - - Defined on continuous interval [0, 1], [0, 100], [0, 100000]
 - - Income, savings balance, credit score [0, 1000], [0, 100000], [0, 100]
@@ -232,14 +233,6 @@ my_sample_na_mean = my_sample.fillna(value=my_sample.mean())
 - Detection vs treatment
 
 ### To detect outliers use box plots
-- Median M: P(x <= M) = 0.5
-- Lower quartile Q1: P(x <= Q1) = 0.25
-- Upper quartile Q3: P(x <= Q3) = 0.75
-- Interquartile range IQR = Q3 - Q1
-- Minimum = Q1 - 1.5 * IQR
-- Maximum = Q3 + 1.5 * IQR
-- Outliers: x < Minimum or x > Maximum
-- Z-score: (x - mean) / standard deviation
 
 ```python
 import matplotlib.pyplot as plt
@@ -251,6 +244,35 @@ my_sample.boxplot(column='FICO_orig_time')
 plt.title("Boxplot of FICO_orig_time")
 plt.show()
 ```
+### Implementation of IQR method in Python
+
+- Median M: P(x <= M) = 0.5
+- Lower quartile Q1: P(x <= Q1) = 0.25
+- Upper quartile Q3: P(x <= Q3) = 0.75
+- Interquartile range IQR = Q3 - Q1
+- Minimum = Q1 - 1.5 * IQR
+- Maximum = Q3 + 1.5 * IQR
+- Outliers: x < Minimum or x > Maximum
+- Z-score: (x - mean) / standard deviation
+
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('c:/temp/hmeq.csv')
+q1 = df.quantile(0.25)
+q3 = df.quantile(0.75)
+iqr = q3 - q1
+# calculate maximum and minimum
+maximum = q3 + 1.5 * iqr
+minimum = q1 - 1.5 * iqr
+# find outliers
+df = df[(df < minimum) & (df > maximum)]
+
+outlier_exist = np.all(df.isnull())
+print(f'Outliers exist: {not outlier_exist}')
+```
+
 
 ## Treatment of Outliers
 - For invalid outliners:
@@ -265,6 +287,14 @@ plt.show()
 ### Outliers in Python
 
 ```python
+import pandas as pd
+import numpy as np
+from scipy import stats
+
+
+my_sample = pd.read_csv("my_sample.csv")
+my_sample_na_mean = my_sample.fillna(value=my_sample.mean())
+
 # Select all numeric variables
 num_variables = my_sample_na_mean \
     .select_dtypes(include=[np.number]).columns.tolist()
@@ -274,21 +304,21 @@ num_variables.remove("BAD")
 
 # Compute z-scores for numeric variables
 my_sample_cnt = my_sample_na_mean[num_variables]
-zscores = my_sample_cnt.apply(stats.zscore)
-max_abs = zscores.apply(lambda x: max(abs(x)) < 3, axis="columns")
-filtered_sample = zscores.loc[max_abs, :]
+z_scores = my_sample_cnt.apply(stats.zscore)
+max_abs = z_scores.apply(lambda x: max(abs(x)) < 3, axis="columns")
+filtered_sample = z_scores.loc[max_abs, :]
 ```
 
 ## Categorization
 
 - Also called coarse classification, classing, binning, grouping
 - Categorical variables:
-- - Purpose of loan=second hand car, first hand car, travel cash: high risk
+- - Purpose of loan=second hand car, first-hand car, travel cash: high risk
 - - Purpose of loan=study, new car, furniture: medium risk
 - - Purpose of loan=house, wedding: low risk
 - Continuous variables:
 - - Age < 30 years: young
-- - Age >= 30 and < 60 years: middle aged
+- - Age >= 30 and < 60 years: middle-aged
 - - Age >= 60 years: old
 
 ```python
@@ -513,6 +543,9 @@ WOE = ln((num_good + n) / (num_bad + n))
 ### WOE and IV in Python
 
 ```python
+import pandas as pd
+import numpy as np
+
 # Calculate information value
 def calc_iv(df, feature, target, pr=False):
     """

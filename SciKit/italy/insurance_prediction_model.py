@@ -8,15 +8,17 @@ The script also calculates the insurance rate for each year based on the tempera
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 import seaborn as sns
 import warnings
 
+from SciKit.italy.utils import found_outliers
+
 warnings.filterwarnings('ignore')
 sns.set(style="darkgrid")
-
 
 
 def forecast_warming():
@@ -24,6 +26,8 @@ def forecast_warming():
                      index_col='year',
                      parse_dates=True,
                      usecols=['year', 'avg_anomaly_temp'])
+
+    found_outliers(df)
 
     # Add a constant to make all values positive
     df['avg_anomaly_temp'] = df['avg_anomaly_temp'] + abs(df['avg_anomaly_temp'].min()) + 1
@@ -75,6 +79,8 @@ def forecast_emissions():
                      parse_dates=True,
                      usecols=['year', 'emissions'])
 
+    found_outliers(df)
+
     # Train the model on data up to 2022
     train = df.loc[:'2022', 'emissions']
     model = ExponentialSmoothing(train, seasonal_periods=3, trend='mul', seasonal='add').fit()
@@ -124,6 +130,8 @@ def forecast_claims(e_df=None, w_df=None):
     # read gross and clean insurance index from historical data
     claims_df = pd.read_csv('../../dataset/IT_claims_2004_2020.csv',
                             index_col='year', parse_dates=True, thousands=',')
+
+    found_outliers(claims_df)
 
     # check correlations between gross and clean index
     corr = claims_df['gross'].corr(claims_df['clean'])  # correlation is weak: 0.074

@@ -52,6 +52,7 @@
 
 - x -> f(x) = (x^p - 1) / p
 - Only for positive x: shift x by a constant
+- Does not guarantee normality
 - Set p by:
   - Experimentation
   - Visual inspection
@@ -257,6 +258,9 @@ print(roc_auc_score(test.BAD, logPrediction))
 
 - Technique to reduce the dimensionality of the data
 - Principal components can be calculated by making use of the eigenvectors of the covariance matrix
+- New variables are linear combinations of the original variables
+- Principal components are orthogonal to each other
+- Principal components are uncorrelated
 - Pro: 
   - Reduces the number of variables
   - Removes multi-collinearity
@@ -269,6 +273,7 @@ print(roc_auc_score(test.BAD, logPrediction))
 
 - Technique to reduce the dimensionality of the data
 - t-Distributed Stochastic Neighbor Embedding
+- t-SNE - is non-linear dimensionality reduction technique
 - t-SNE stands for:
   - Comparable to PCA
   - t-SNE seeks to preserver local similarities
@@ -276,3 +281,32 @@ print(roc_auc_score(test.BAD, logPrediction))
 > t-SNE works in 2 steps:
 > 1. Probability distribution representing similarity measure over pairs of high-dimensional data points is constructed.
 > 2. Similar probability distribution over data points in low-dimensional map is constructed
+
+1. Measure similarities between data points in high dimensional space
+2. Measure similarities between data points in low dimensional space
+
+> Most implementations only allow for 2 or 3 dimensions
+> t-SNE learns non-parametric mapping:
+>   - No explicit function to map from high to low dimensions
+>   - No possible to embed test points in existing map
+>   - t-SNE less suitable as dimensionality reduction technique in predictive setup
+>   - Extensions exist that learn multivariate regressor to predict map location from input data or construct regressor that minimizes regressor tha\t minimizes t-SNE loss directly
+> Can provide your own pairwise similarity matrix and do KL-minimization instead using built-in conditional probability based similarity measure
+>   - Diagonal elements should be 0 and should be normalized to sum to 1
+>   - Distance matrix can also be used: similarity = 1 / (1 + distance)
+>   - Avoids having to tune the perplexity parameter (decide on similarity of points)
+> As t-SNE uses a gradient descent algorithm based approach, remarks regarding learning rates and initialization of mapped points apply
+>   - E.g initialization sometimes done using PCA
+>   - Defaults usually work well
+> Most important hyperparameter is perplexity:
+>   - Knob that sets number of effective nearest neighbors (similar to k in k-NN)
+>   - Perplexity values depends on density of data
+>   - Denser dataset requires higher perplexity
+>   - Typical values range from 5 to 50
+> Impact of perplexity: neighborhood effectively considered
+> Different perplexity values can lead to different results:
+>   - Size of clusters has no meaning
+>   - Neither does distance between clusters
+
+# TODO: Read more about t-SNE at : [t-SNE](https://distill.pub/2016/misread-tsne/)
+# TODO: Implementations of t-SNE in Python [t-SNE](https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html)

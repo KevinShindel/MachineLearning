@@ -1,7 +1,42 @@
+import pandas as pd
+from scipy import stats
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
+import numpy as np
 
 MAX_PREDICTION = 4
+
+
+def found_outliers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    This function will detect outliers in the data
+    :param df: DataFrame
+    :return: DataFrame
+    """
+
+    # lets detect Outliers, calculate IQR first
+    q1 = df.quantile(0.25)
+    q3 = df.quantile(0.75)
+    iqr = q3 - q1
+
+    # calculate maximum and minimum
+    maximum = q3 + 1.5 * iqr
+    minimum = q1 - 1.5 * iqr
+
+    # find outliers
+    df = df[(df < minimum) & (df > maximum)]
+
+    outlier_exist = np.all(df.isnull())
+    print(f'Outliers exist: {not outlier_exist}')
+
+    # use Z-score method to detect outliers
+    z_scores = (df - df.mean()) / df.std()  # or z_scores = df.apply(stats.zscore)
+
+    # filter out the outliers
+    max_abs = z_scores.apply(lambda x: np.abs(x) < 3, axis='columns')
+    filtered_entries = z_scores[max_abs]
+
+    return filtered_entries
 
 
 def adjust_model(df):
