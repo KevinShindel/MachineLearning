@@ -8,14 +8,11 @@ The script also calculates the insurance rate for each year based on the tempera
 """
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 import seaborn as sns
 import warnings
-
-from SciKit.italy.utils import found_outliers
 
 warnings.filterwarnings('ignore')
 sns.set(style="darkgrid")
@@ -26,8 +23,6 @@ def forecast_warming():
                      index_col='year',
                      parse_dates=True,
                      usecols=['year', 'avg_anomaly_temp'])
-
-    found_outliers(df)
 
     # Add a constant to make all values positive
     df['avg_anomaly_temp'] = df['avg_anomaly_temp'] + abs(df['avg_anomaly_temp'].min()) + 1
@@ -51,7 +46,7 @@ def forecast_warming():
     plt.xlabel('Year')
     plt.title('Italy Global Warming Anomaly Predicted vs Real 1860 – 2022')
     plt.legend()
-    plt.savefig('Italy_3.png', dpi=500)
+    plt.savefig('assets/Italy_3.png', dpi=500)
     plt.show()
 
     # 4. Plot the forecasted data
@@ -62,7 +57,7 @@ def forecast_warming():
     plt.ylabel('Temperature Anomaly in Celsius')
     plt.title('Italy Global Warming Anomaly Predicted vs Real 2023 – 2028')
     plt.legend()
-    plt.savefig('Italy_4.png', dpi=500)
+    plt.savefig('assets/Italy_4.png', dpi=500)
     plt.show()
     forecasted_df = pd.DataFrame(forecast,
                                  columns=['avg_anomaly_temp'],
@@ -78,8 +73,6 @@ def forecast_emissions():
                      index_col='year',
                      parse_dates=True,
                      usecols=['year', 'emissions'])
-
-    found_outliers(df)
 
     # Train the model on data up to 2022
     train = df.loc[:'2022', 'emissions']
@@ -102,7 +95,7 @@ def forecast_emissions():
     plt.xlabel('Year')
     plt.title('Italy CO2 Emissions: Predicted vs Real 1860 - 2022')
     plt.legend()
-    plt.savefig('Italy_1.png', dpi=500)
+    plt.savefig('assets/Italy_1.png', dpi=500)
     plt.show()
 
     # 2. Create plot with real data and forecasted data
@@ -112,7 +105,7 @@ def forecast_emissions():
     plt.ylabel('Emission')
     plt.title('Italy CO2 Emissions: Predicted vs Real 2020 - 2028')
     plt.legend()
-    plt.savefig('Italy_2.png', dpi=500)
+    plt.savefig('assets/Italy_2.png', dpi=500)
     plt.show()
 
     # union forecasted and real data
@@ -130,8 +123,6 @@ def forecast_claims(e_df=None, w_df=None):
     # read gross and clean insurance index from historical data
     claims_df = pd.read_csv('../../dataset/IT_claims_2004_2020.csv',
                             index_col='year', parse_dates=True, thousands=',')
-
-    found_outliers(claims_df)
 
     # check correlations between gross and clean index
     corr = claims_df['gross'].corr(claims_df['clean'])  # correlation is weak: 0.074
@@ -156,7 +147,7 @@ def forecast_claims(e_df=None, w_df=None):
     plt.title('Correlation of Gross Claims Expenditures to Emissions in Italy 2004 – 2020',
               x=0.6)
     plt.tight_layout()
-    plt.savefig('Italy_6.png', dpi=500)
+    plt.savefig('assets/Italy_6.png', dpi=500)
     plt.show()
 
     # we found that correlation between emissions and gross index is negative, so we need cant predict gross index based on emissions and warming
@@ -184,7 +175,7 @@ def forecast_claims(e_df=None, w_df=None):
     plt.title('Gross Claims Expenditures Predicted vs Real in Italy 2004 – 2020 (based on historical data)',
               fontsize=9, x=0.4)
     plt.tight_layout()
-    plt.savefig('Italy_7.png', dpi=500)
+    plt.savefig('assets/Italy_7.png', dpi=500)
     plt.show()
 
     # Forecast the gross for 2016-2020
@@ -205,7 +196,7 @@ def forecast_claims(e_df=None, w_df=None):
               fontsize=9, x=0.4)
     plt.legend()
     plt.tight_layout()
-    plt.savefig('Italy_8.png', dpi=500)
+    plt.savefig('assets/Italy_8.png', dpi=500)
     plt.show()
 
 
@@ -213,11 +204,11 @@ if __name__ == '__main__':
     emission_df = forecast_emissions()
     warming_df = forecast_warming()
 
-    # find correlation between co2 emissions and global warming
+    # find a correlation between co2 emissions and global warming
     corr = emission_df['emissions'].corr(warming_df['avg_anomaly_temp'])
     print('Correlation between CO2 emissions and global warming: ', corr)  # considered high correlation : 0.705
 
-    # Lets watch to heatmap emissions vs warming
+    # Let's watch to heatmap emissions vs. warming
     df = pd.concat([emission_df, warming_df], axis=1).dropna(how='all')
 
     # Calculate the correlation matrix for 1860 and 2020 years
@@ -229,7 +220,7 @@ if __name__ == '__main__':
     plt.title('Correlation of Gross Claims Expenditures to Emissions in Italy 1860 – 2020',
               fontsize=11, x=0.6)
     plt.tight_layout()
-    plt.savefig('Italy_5.png', dpi=500)
+    plt.savefig('assets/Italy_5.png', dpi=500)
     plt.show()
 
     forecast_claims(emission_df, warming_df)

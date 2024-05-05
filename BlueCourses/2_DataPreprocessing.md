@@ -166,6 +166,27 @@ plt.show()
 - Variance
 - Percentile values
 
+### Descriptive Statistics in Python
+
+```python
+import pandas as pd
+import numpy as np  
+
+df = pd.DataFrame({
+    'ID': np.arange(1000),
+    'Age': np.random.randint(18, 65, 1000),
+    'Income': np.random.randint(10000, 100000, 1000),
+    'Marital Status': np.random.choice(['Married', 'Single', 'Divorced'], size=1000),
+    'Sex': np.random.choice(['Male', 'Female'], size=1000),
+    'Occupation': np.random.choice(['Student', 'Employee', 'Self Employed'], size=1000),
+    'Good Customer': np.random.randint(0, 2, 1000)
+})
+
+# Descriptive statistics
+df.describe()
+```
+
+
 ## Missing Values
 
 ### Example of Dataset with missing values
