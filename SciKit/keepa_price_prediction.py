@@ -1,3 +1,13 @@
+"""
+Description: Keepa price prediction
+             This script is used to predict the price of the product using the Keepa dataset.
+             The dataset contains the price of the product at different times.
+             The script uses the Holt-Winters method to predict the price of the product.
+Author: Kevin Shindel
+Date: 2024-08-05
+"""
+
+# import libraries
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns

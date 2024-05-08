@@ -1,4 +1,10 @@
+"""
+Description: This script demonstrates how to use logistic regression to forecast avocado prices.
+Author: Kevin Shindel
+Date: 2024-08-05
+"""
 
+# Import libraries
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd

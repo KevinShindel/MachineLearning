@@ -1,7 +1,10 @@
+""" This module contains the function to create a SparkSession object. """
+
 from pyspark.sql import SparkSession
 
 
 def create_spark():
+    """ Create a SparkSession object. """
     spark = SparkSession.builder \
         .master("local[*]") \
         .appName("TestSuite") \

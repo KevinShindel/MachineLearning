@@ -1,16 +1,13 @@
-# q: create simple example of scikit learn library for machine learning using titanic dataset
-# a: use the titanic dataset to predict whether a passenger survived or not
-# 1. import libraries
-# 2. import dataset
-# 3. clean dataset
-# 4. split dataset into training and test sets
-# 5. create model
-# 6. train model
-# 7. test model
-# 8. evaluate model
-# 9. improve model
-# 10. present results
+"""
+Description: This script trains a logistic regression model to predict whether a person survived the Titanic disaster
+                using the Titanic dataset. The script imports the dataset, cleans the data, splits the data into training
+                and test sets, creates a logistic regression model, trains the model, tests the model, evaluates the model,
+                improves the model using feature selection and pipeline, and presents the results using cross validation.
+Author: Kevin Shindel
+Date: 2024-08-05
+"""
 
+# import libraries
 import numpy as np
 import pandas as pd
 from sklearn import feature_selection, pipeline
@@ -24,7 +21,6 @@ TRAIN_SIZE = 0.8
 MAX_ITER = 1000
 
 
-# 2. import dataset
 def import_data():
     # import train and test datasets
     online_titanic_file = 'https://raw.githubusercontent.com/Geoyi/Cleaning-Titanic-Data/master/titanic_original.csv'
@@ -32,14 +28,12 @@ def import_data():
     return titanic_df
 
 
-# 3. clean dataset
 def clean_data(df):
     # drop columns that are not useful
     df = df.drop(['name', 'ticket', 'cabin'], axis=1)
     return df
 
 
-# 4. split dataset into training and test sets
 def split_data(df):
     # split dataset into training and test sets
     train_df = df.sample(frac=TRAIN_SIZE, random_state=0)
@@ -47,33 +41,28 @@ def split_data(df):
     return train_df, test_df
 
 
-# 5. create model
 def create_model():
     return LogisticRegression(max_iter=MAX_ITER)
 
 
-# 6. train model
 def train_model(model, train_df):
     # train model
     model.fit(train_df.drop('survived', axis=1), train_df['survived'])
     return model
 
 
-# 7. test model
 def test_model(model, test_df):
     # test model
     predictions = model.predict(test_df.drop('survived', axis=1))
     return predictions
 
 
-# 8. evaluate model
 def evaluate_model(predictions, test_df):
     # evaluate model
     accuracy = metrics.accuracy_score(test_df['survived'], predictions)
     return accuracy
 
 
-# 9. improve model
 def improve_model(model):
     # improve model by using feature selection and pipeline to chain the feature selection and model
     improved_model = pipeline.Pipeline([
@@ -83,7 +72,6 @@ def improve_model(model):
     return improved_model
 
 
-# 10. present results
 def present_results(model):
     # present results using cross validation to get a more accurate estimate of the model's performance
     results = model_selection.cross_val_score(model,

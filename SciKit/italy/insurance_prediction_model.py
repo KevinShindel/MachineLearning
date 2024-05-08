@@ -64,6 +64,23 @@ def forecast_warming():
                                  )
     # union forecasted and real data
     full_df = pd.concat([df, forecasted_df['2025':'2028']])
+
+    table_df = full_df['2023':]
+    # Create a percent change column named 'changed in %', where 2023 is 100%
+    table_df['changed in %'] = round(table_df['avg_anomaly_temp'].pct_change() * 100, 2)
+    table_df.loc['2023', 'changed in %'] = 0
+    print(table_df)
+
+    table_df.index = table_df.index.year
+    # Create a bar plot with calculated values from column 'changed in %'
+    table_df['changed in %'].plot(kind='bar', color='skyblue')
+    plt.xlabel('Year')
+    plt.ylabel('Temperature Anomaly changes in %')
+    plt.title('Italy Global Warming Anomaly Predicted 2023 – 2028')
+    plt.tight_layout()
+    plt.savefig('assets/Italy_4_table.png', dpi=500)
+    plt.show()
+
     return full_df
 
 
@@ -170,7 +187,7 @@ def forecast_claims(e_df=None, w_df=None):
     gross_df['gross'].plot(label='Real Gross Claims')
     forecast['gross'].plot(label='Predicted Gross Claims')
     plt.xlabel('Year')
-    plt.ylabel('Gross Index')
+    plt.ylabel('Gross Claims Expenditures')
     plt.legend()
     plt.title('Gross Claims Expenditures Predicted vs Real in Italy 2004 – 2020 (based on historical data)',
               fontsize=9, x=0.4)
@@ -187,6 +204,23 @@ def forecast_claims(e_df=None, w_df=None):
 
     # Forecast the gross for 2021-2028
     forecast = model.predict(start='2021', end='2028')
+
+    # TODO: Create table, 2020 is 100% and further values in % and values.
+    table_df = pd.DataFrame(forecast, columns=['gross'])
+    table_df['changed in %'] = round(table_df['gross'].pct_change() * 100, 2)
+    table_df.loc['2020', 'changed in %'] = 0
+
+    # Create a bar plot with calculated values from column 'changed in %'
+    table_df.index = table_df.index.year
+    table_df['changed in %'].plot(kind='bar', color='skyblue')
+    plt.xlabel('Year')
+    plt.ylabel('Gross Claims Expenditures changes in %')
+    plt.title('Gross Claims Expenditures Predicted 2020 – 2028')
+    plt.tight_layout()
+    plt.savefig('assets/Italy_8_table.png', dpi=500)
+    plt.show()
+    print(table_df)
+
 
     # 8. Plot the forecasted data
     forecast.plot(label='Predicted Gross Claims')
@@ -217,7 +251,7 @@ if __name__ == '__main__':
 
     # 5. Correlation matrix heatmap between warming and emissions
     sns.heatmap(corr_matrix, annot=True)
-    plt.title('Correlation of Gross Claims Expenditures to Emissions in Italy 1860 – 2020',
+    plt.title('Correlation of Global Warming to Emissions in Italy 1860 – 2020',
               fontsize=11, x=0.6)
     plt.tight_layout()
     plt.savefig('assets/Italy_5.png', dpi=500)

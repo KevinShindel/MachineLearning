@@ -107,11 +107,7 @@ def forecasting_and_plotting(model: HoltWintersResults, df: pd.DataFrame) -> Non
 
 
 if __name__ == '__main__':
-    # load the data
-    df = load_data()
 
-    # create a model
-    model = create_model(df)
-
-    # forecast and plot the data
-    forecasting_and_plotting(model, df)
+    df = load_data() # load the data
+    model = create_model(df) # create a model
+    forecasting_and_plotting(model, df) # forecast and plot the data
