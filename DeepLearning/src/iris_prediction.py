@@ -160,8 +160,7 @@ def predict_iris_via_ann():
     print(f"ANN Accuracy: {accuracy}")
 
     # save model
-    model.save('models/iris_ann_model.ker+'
-               'as')
+    model.save('models/iris_ann_model.keras')
 
 
 if __name__ == '__main__':
