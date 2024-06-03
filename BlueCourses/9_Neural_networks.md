@@ -64,7 +64,7 @@ print(classification_report(Y, predictions)) # Classification report
 - Requires large amounts of data and computational power
 
 # Opening Neural Networks Black Box
-- NN commonly reffered to as black box techniques because of complexity, mathematical relationship between outputs and inputs is not easily understood
+- NN commonly referred to as black box techniques because of complexity, mathematical relationship between outputs and inputs is not easily understood
 - In credit risk modeling, analytical models need to be white box and interpretable
 - Techniques to open up NN black box: variable selection, rule extraction, two-stage models.
 
@@ -175,7 +175,7 @@ predictions = model.predict(normalized_X) # Make predictions
 
 # Two-Stage Model
 - Start with original data
-- Build simple model
+- Build simple model (Linear or Logistic Regression)
 - Calculate errors from a simple model
 - Build NN that predicts errors from a simple model
 - Score new observations by adding output from simple and NN models
@@ -183,7 +183,27 @@ predictions = model.predict(normalized_X) # Make predictions
 - Do not estimate in one multivariate setup
 
 # Self-Organizing Maps
-
-# Self-Organizing Maps Example
+- Unsupervised learning technique
+- Feedforward neural network with 2 layers: input and output
+- Neurons from output layer are organized in 2D grid
+- Each input connected to all neurons in output layer
+- Weight randomly initialized
+- When training vector x is presented, weight vector for ech neuron is compared with x using 
+  Euclidian distance metric.the winning neuron
+- Decreasing learning rate and radius give stable
+- Neuron with smallest distance is called  map after certain amount of training 
+- Training stopped when BMUs remain stable or after number of iterations (500 times number of SOM neurons)
+- Neurons move toward input neurons
+- SOMs can be visualized using U-matrix, component planes, and hit maps
+- For a small num of variables (4 or 5) the codebook vectors can be visualized in 2D or 3D and 
+  is excellent visualization of the contribution to the SOM for each variable
+- A codebook vector graph combines basically different component planes, in a single visualization.
 
 # Self-Organizing Maps Evaluated
+
+Advantages:
+- Exploratory data analysis
+- Can be combined with decision trees to further characterize clusters
+Disadvantages:
+- Difficult to compare and interpret
+- Experimental evaluation needed
