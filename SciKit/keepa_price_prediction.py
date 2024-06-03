@@ -34,7 +34,6 @@ def main():
     plt.show()
 
     # resample to daily
-    df_resampled = df.resample('D').max()
     df[df[price_col] == 0] = np.nan
     df = df.fillna(method='ffill')
 
