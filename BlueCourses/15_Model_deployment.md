@@ -83,6 +83,77 @@
 # Model Stress Testing
 - Analytical models more and more used for strategic dicisioning: pricing, provisioning, equity calc
 - Stress testing: understand impact of adverse economic scenarios on analytical outputs.
+- Sensitivity test:
+- - Single factor: impact of competitor action on churn rates
+- - Multifactor: impact of income drop and unemployment rise on credit scores.
+- Scenario test:
+- - Historical: 2008 financial crisis
+- - Hypothetical: 3 periods of GPD contraction.
+- Stress Testing Governance:
+- - define scope
+- - define ownership 
+- - define contributors
+- - present results to senior management
+- - actions and strategies to mitigate risks
+- - public disclosure
+- - documentation
+
 # Model Ethics
+- Cannot use certain variables because of ethical reasons (cannot use gender, age, ethnicity... 
+  to discriminate between good and bad credit risk)
+- Be aware of latent discrimination: correlated variables, years client versus age, income 
+  versus gender. 
+- Need for white-box, interpretable models.
+- Trade-off between model performance and model interpretability.
+- Might depend on context (e.g. credit risk)
+- Ethical impact:
+- - developed countries: young people and immigrants face troubles because of lack of credit 
+    history
+- - developing countries: historical financial data often non-existent.
+- - access to small credits has social impact.
+- - call data provides an alternative for credit scoring.
+- - financial inclusion.
+- Privacy impact: 
+- - data sharing
+- - explicit authorization from user
+- - possibility to opt out and right to be forgotten
+- - GDPR
 
 # Privacy and Security
+- Business vs ML:
+- - Business - ownership of ML model
+- - ML: only data useful for ML models
+- Data Security: set of policies and techniques to ensure confidentiality, availability and 
+  integrity of data..
+- Data privacy: parties accessing and using data can do so only in ways that comply with agreed 
+  upon purposes of data use in their role.
+- Security necessary instrument to guarantee data privacy.
+
+- Data security: 
+- - guaranteeing data integrity
+- - guaranteeing data availability
+- - authentication and access control
+- - guaranteeing confidentiality
+- - auditing
+- - mitigating vulnerabilities
+
+- Responsible: responsible for developing ML models.
+- Accountable: delegate work and decide what should be done
+- Consulted: experts who advise business and ML teams
+- Informed: should be kept up-to-date.
+
+- Access internal data via data access request
+- Internal privacy commission investigates: which variables are sensitive, which variables and 
+  instances should be shared, which user should be authorized to access data
+- Actions: Anonymization, SQL views.
+
+- Anonymization: transform sensitive data so exact value cannot be covered
+- Types of keys: 
+- - natural key: reveals identity of instance (e.g. VAT number)
+- - technical key: conservation of natural key to protect true identity of instance.
+
+- Anonymization techniques:
+- - Aggregation: summary statistics
+- - Dis-cretization: partition numeric variable into disjoint, mutually-exclusive classes.
+- - Value distortion: return x+ e instead of x
+- - Generalization: generalize into less specific but semantically consistent description.
