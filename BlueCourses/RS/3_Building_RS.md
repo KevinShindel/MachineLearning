@@ -158,7 +158,7 @@ Precision for top 5 = 2/5
 
 
 - **Spearman** rank order correlation:
-- - measures degree to which monolithic relationship exists between predicted and actual ratings.
+- - measures the degree to which monolithic relationship exists between predicted and actual ratings.
 - - Compute numeric ranks by assigning 1 to the lowest rating, 2 to second-lowest rating, etc.
 - - Average in case of tied ratings.
 - - Spearman then becomes Pearson correlation between predicted and actual ranks.
@@ -167,3 +167,14 @@ Precision for top 5 = 2/5
 | Items | Actual Rating | Predicted Rating | Score Actual 
 
 ## Evaluating Recommender Systems: Other Criteria
+- Diversity: how diverse are the recommendations?
+- User knowledge: how much does the user know about the recommended items?
+- Item coverage: how many items are recommended?
+- Serendipity: how surprising are the recommendations?
+- Cold start: how well does the system perform for new users or items?
+- Scalability: how well does the system perform with large data sets?
+- Profit impact: A/B testing: 
+- - Group A: random generations.
+- - Group B: analytical recommendations.
+- Uplift effect: Is recommendation an item a user was going to buy anyway useful?
+- Interpretability: why are items recommended?
