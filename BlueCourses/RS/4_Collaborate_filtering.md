@@ -365,10 +365,26 @@ for itm_idx in np.argwhere(np.isnan(ratings[user_to_recommend_for, :]))[:, 0]:
 ```
 
 ## K-nearest neighbor based filtering: Advantages
-- 
+- Easy to develop
+- Easy to explain recommendations
+- Good performance
+- Widely studied and applied
 
 ## K-nearest neighbor based filtering: Disadvantages
-- 
+- Cold start problem for new users and items: what about users\items with no\very few ratings?
+- Performance drops when sparsity increases
+- Popularity bias: items liked by more users have higher chance of being recommended
+- Scaling: do not scale well for most real-world scenarios, E-business sites have tens of 
+  millions of customers and millions of items.
 
 ## K-nearest neighbor based Filtering : Scientific Perspective
-- 
+
+|                       | Binary purchase char.controlled | Reduction as preprocessing | CF method  | Similarity measure | Evaluation metric |
+|-----------------------|---------------------------------|----------------------------|------------|--------------------|-------------------|
+| Breese et al. 1998    | None                            | None                       | User-based | Cosine             | Accuracy          |
+| Li et al. 2011        | None                            | None                       | User-based | Cosine             | Accuracy          |
+| Deshpande et al. 2004 | None                            | None                       | Item-based | Cosine             | Accuracy          |
+| Linden et al. 2003    | None                            | None                       | Item-based | Cosine             | Accuracy          |
+| Pradel et al. 2012    | None                            | None                       | Item-based | Cosine             | Accuracy          |
+| Sarwar et al. 2001    | Sparsity                        | None SVD                   | User-based | Cosine             | Accuracy          |
+| Geuens et al. 2018    | Sparsity                        | None SVD                   | User-based | Cosine             | Accuracy          |
