@@ -341,10 +341,44 @@ tf.keras.backend.clear_session()
 ```
 
 ## Other Deep Learning Neural Networks for Recommendation
--
+- Convolutional NN:
+- - Feedforward NN with convolutional layers and pooling operations.
+- - Capture global and local patterns in data.
+- - Extract features from unstructured multimedia data.
+- Recurrent NN:
+- - Model sequential data
+- - Remember previous computations when making predictions.
+- Restricted Boltzmann Machines:
+- - two-layer NN consisting of visible layer and a hidden layer.
+- Deep reinforcement learning:
+- - Dynamic systems
+- - Capture user's temporal intentions and respond accordingly.
+- Deep Hybrid Learning.
 
 ## Deep Learning: Evaluation
--
+- Advantages:
+- - Complex (unstructured) data
+- - Non-linear behavior
+- Disadvantages:
+- - Interpretability
+- - Extensive hyperparameter tuning
+- - Scalability
+- From the Dacrema et al. study:
+- - Analyzed a number of recent deep learning algorithms for recommendation.
+- - Reproducing published research is still challenging.
+- - Most of the newer techniques can be outperformed by simpler algorithms.
+- - Some even outperformed by TopPopular recommendation method.
+- Reasons:
+- Benchmarks not appropriate chosen.
+- - Benchmarks not property tuned.
+- - Not clear what is good benchmark.
+- - Different data sets, data preprocessing and evaluation measures.
+- - Tuning the parameters of new deep learning methid on test set.
+- - Accuracy improvements often very marginal
+- - Not all of the code is shared.
 
 ## Deep Learning: Conclusion
--
+- Never start deep learning as your first approach for building a recommender system.
+- Start with a k-nearest neighbor based method or extension thereof:
+- - User-user collaborative filtering
+- - Item-item collaborative filtering
