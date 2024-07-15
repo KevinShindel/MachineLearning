@@ -66,19 +66,54 @@ Example of social networks analytics
 - Adjacency list - worst
 
 ## Network Centrality Measures
--
+- Network centrality measures identify the most important vertices within a network
+- Examples: 
+- - Degree - number of edges
+- - Closeness - distance to a node to all other nodes in the network
+- - Betweenness: counts number of times that node or edge appears in geodesics
+- - Graph Theoretic Center: node with the smallest sum of distances to all other nodes
+- Geodesic: shortest path between two nodes
 
 ## Community Mining
--
+- Community - substructure of graph with dense linkage between members of community and sparse 
+  density between members of different communities
+- Communities often occur in WWW, telecommunication networks, academic networks, friendship networks, etc.
+- Peer pressure can strengthen tendency to commit fraud
+- Are people more likely to commit fraud if they are influenced by a whole community than if 
+  they were influenced by only one fraudulent individual? - Yes.
+- Basic methods:
+- - Graph partitioning
+- - Girvan-Newman algorithm
+- Advanced methods:
+- - spectral clustering
+- - directly optimizing modularity
+- - finding communities with overlap
 
 ## Graph Partitioning Approaches
--
+- Split whole graph into predetermined number of clusters
+- Optimize ratio between within-community and between-community edges
+- Different techniques to achieve optimal cut
+- Iterative Bisection:
+- - splits given graph into 2 groups using minimum cut size
+- - cut size quantifies between-community edges
+- - metrics: min cut, ratio cut and min-max cut
 
 ## Girvan Newman algorithm
--
+- Similar to divisive hierarchical clustering
+- Steps:
+- - Calculate betweenness of all edges in graph
+- - Edge with the highest betweenness is removed
+- Result of the algorithm is essentially a dendrogram
+- Other approaches: Q-modularity, FastModularity, etc.
 
 ## Bottom Up Community Mining
--
+- Starts with one node and add more nodes to community based on links
+- Extracted communities can be:
+- - Complete: each node connected to each other node
+- - Partial: each node connected to at least x% of other nodes
+- Overlapping communities: communities where some nodes belong to more than one community
+- Graph partitioning algorithms do no generate overlapping communities
+- Bottom-up approaches able to create overlapping communities
 
 ## Modularity Q
 -
