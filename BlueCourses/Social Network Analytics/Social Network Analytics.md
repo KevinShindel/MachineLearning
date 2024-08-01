@@ -167,19 +167,41 @@ Example of social networks analytics
 - Collective inference - Inference of node depends on inference of other nodes, can be done using Gibbs sampling, iterative classification, etc.
 
 ## Relational Neighbor Classifier
--
-
-## Probabilistic Relational Neighbor Classifier
--
+- Assumptions: 
+- - Homophily " guild by association "
+- - Posterior class probability of a node is proportional to the number of neighbours of the node that belong to the class
+- Gave good performance in fraud detection, churn prediction, etc.
 
 ## Relational Logistic Regression
--
+- Local attributes - Describing a customer's behaviour (age, income)
+- Network/link attributes:
+- - Most frequently occuring class in neighbourhood
+- - Frequency of classes of neighbours
+- - Binary indicators indicates class presence
+- Combine local and network attributes in a single logistic regression model
+- Gave good performance in fraud detection, churn prediction, etc.
+- Most frequently adopted in industry
 
 ## Social Network Featurization
--
+- Map neighbor and network characteristics into features
+- Combine with local variables for predictive modeling
+- Network features can measure behavior in terms of:
+- - target of neighbors
+- - local characteristics of neighbors
+- - network characteristics
+- Carefully think about which features to include
+- Variable selection will be very important
+- Include as many features as possible
+- Use variable selection
+- Construct the predictive model using logistic regression, neural networks, SVMs, random forest.
 
 ## Collective Inference
--
+- Given a network initialized by a local model and relational model, a collective inference method infers a set of class labels/probabilities for the unknown nodes.
+- Gibbs sampling German and German (1984)
+- Iterative classification - Lu and Getoor (2003)
+- Relaxation labeling - Chakrabarti et al. (1998)
+- Loopy belief propagation - Pearl (1988)
+- PageRank - Brin and Page (1998)
 
 ## Gibbs Sampling
 -
