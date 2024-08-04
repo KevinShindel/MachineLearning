@@ -204,13 +204,34 @@ Example of social networks analytics
 - PageRank - Brin and Page (1998)
 
 ## Gibbs Sampling
--
+1. Given a network with known and unknown nodes
+2. Initialize every unknown node using local classifier to obtain posterior
+3. Sample class value of each node according to probabilities
+4. Generate random ordering for unknown nodes
+5. For each node i in ordering:
+6. apply relational learner to node i to obtain posterior probabilities
+7. sample class value for node i according to probabilities
+8. Repeat step 5 during 200-iterations without keeping any statistic
+9. Repeat step during 2000-iterations counting number of times each class is assigned to a node, normalizing these counts gives us the final class probability estimates.
 
 ## Iterative classification
--
+Step 1: Bootstrap
+- Use only local attributes to assign initial class to each node
+Step 2: Iteration
+- Start from given ordering of nodes
+- Iteratively apply full model to classify each node until termination criterion is met (compute link stats based on current assigments, compute posterior probability for each 
+  class, choose class based on largest posterior probability)
+- Also need to decide on ordering strategy (which nodes to consider first step 2, based on number of links, link destiny, ...)
 
 ## PageRank
--
+- Basis of Google's search engine
+- Represents probability of visiting web page
+- Depends on PageRank of linking pages and their number of outgoing links
+- Takes into account random surfing behaviour
+- Can be used to propagate behaviour in any type of social network:
+- - adjacency matrix represents people-2-people network
+- - known fraudulent nodes included in restart vector
+- - vector contains fraud ranking
 
 ## From Unipartite towards Bipartite Networks
 -
