@@ -1,0 +1,8 @@
+- What happens in a web browser
+- What goes on behind the browser
+- The HyperText Transfer Protocol
+- Talking HTTP with Python
+- Python HTTP libraries
+- Requests hands-on
+- Using Requests
+- Getting the weather with Requests
