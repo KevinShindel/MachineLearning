@@ -234,22 +234,40 @@ Step 2: Iteration
 - - vector contains fraud ranking
 
 ## From Unipartite towards Bipartite Networks
--
+- Unipartite networks:
+- - Nodes = {Companies}
+- - Node label = {Fraudulent, Legitimate}
+- - Links = {Resources}
+- - Link Weight = Jaccard index = shared resources/ total resources
+- Advantage: Simple representation
+- Disadvantage: No information about resources, cliques of resources
+
+- Bipartite networks:
+- Nodes = {Companies, Resources}
+- Node label = {Fraudulent, Legitimate}
+- Links = {Associated-to}
+- Link Weight = Recency of association
+- Advantage: Information about resources, "fraudulent" resources
+- Disadvantage: More complex representation
 
 ## Featurizing a Bigraph
--
+- Consider the egonet for each company: company and direct resources
+- Featurize the egonet as follows:
+- - Number of links to fraudulent resources
+- - Number of links to non-fraudulent resources
+- - relative number of links to fraudulent resources
+- - FS is number of fraudulent companies connected to resources / total number of companies connected to resources
+- - Min/ Max/ Avg fraud score of resources connected to company
 
-## Propagation in bipartite graphs
--
-
-## Multipartite graphs
--
-
-## Gotcha!
--
+## Gotcha! - Fraud detection tool!
+- TODO: find info about Gotcha!
 
 ## BiRank
--
+- Personalized PageRank for bipartite networks: nodes of the same type cannot be connected
+- Brings out nodes in network that are most central from perspective of specific source nodes
+- Personalize ranks of nodes in network towards source nodes
 
 ## Representation Learning
--
+- Personalized PageRank for bipartite networks: nodes of the same type cannot be connected
+- Brings out nodes in network that are most central from perspective of specific source nodes
+- Personalize ranks of nodes in network towards source nodes
