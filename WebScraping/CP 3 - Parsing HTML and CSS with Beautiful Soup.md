@@ -43,6 +43,191 @@ print(soup.prettify())
 - tag.find_all('h1') the same as tag('h1')
 
 ## Beautiful Soup hands-on
+
+### Scraping the BlueCourses web site
+```python
+import requests
+from bs4 import BeautifulSoup as bs
+
+url = 'http://www.bluecourses.com/'
+r = requests.get(url)
+html_content = r.text
+soup = bs(html_content, 'html.parser')
+
+course_info_elements = soup.find_all(class_='courses-listing-item')
+print(len(course_info_elements))
+
+# type of the elements: Tag
+type(course_info_elements[0])
+
+# Tag name of the element 
+print(course_info_elements[0].name)
+
+# A list containing the tag's children as a list 
+print(course_info_elements[0].contents)
+
+# Get the textual contents as clear text ( Note the diff between text and string)
+    
+print(course_info_elements[0].text)
+print(course_info_elements[0].string)
+
+# Iterate elements
+for element in course_info_elements:
+    course_name = element.find(class_='course-title').get_text(strip=True)
+    course_desc = element.find(class_='course-description').get_text(strip=True)
+    course_link = element.find('a').get('href')
+    print(f'{course_name} - {course_desc} - {course_link}')
+```
+### Scraping Hacker News
+```python
+import requests
+from bs4 import BeautifulSoup as bs
+url = 'https://news.ycombinator.com/'
+
+r = requests.get(url)
+html_contents = r.text
+
+html_soup = bs(html_contents, 'html.parser')
+
+for post in html_soup.find_all('tr', class_='athing'):
+    post_title_element = post.find('a', class_='storylink')
+    post_title = post_title_element.get_text(strip=True)
+    post_link = post_title_element.get('href')
+    post_points = post.find_next(class_='score').get_text(strip=True)
+    print(post_title, post_link, post_points)
+    print()
+```
+### Dealing with JS in Beautiful Soup
+- Inspect tool in browser shows the page as currently rendered:
+- - Including dynamic changes by JS
+- - Inpsecting element in browser shows the current state of the DOM
+- Requests and BS cannot execute JS:
+- - Static view, as the page came in
+- - View source in browser
+
 ## Cascading Style Sheets
-## CSS selectors in Beautiful Soup
-## Further Beautiful Soup examples
+- Common HTML attributes which help to select elements:
+- - ID: unique identifier
+- - Class: group of elements
+- - Tag name: all elements of a certain type
+- Originaly HTML was meant to define both the structure and formatting of a website
+- Web devs began to argue that the structure and formatting of documents basically relate to two diff concerns.
+- CSS to govern how a document should be styled, HTML governs how it should be structured.
+- In CSS, style info is written down as a list of colon-separated key-value pairs.
+
+```css
+h1 {
+    color: red;
+    background-color: yellow;
+    font-size: 14pt;
+    border: 2px solid yellow;
+}
+```
+- The style declarations can be included in a document in three diff ways:
+- - Inside a regular HTML attribute
+- - Inside a style tag
+- - In an external CSS file
+- How to determine to which elements the styling should be applied?
+
+- tagname - select all elements with a particular tag name
+- .classname - select all elements with a particular class
+- #id - select the element with a particular id
+- selector1 selector2 - select all elements that are descendants of selector1 and match selector2
+- selector1 > selector2 - select all elements that are children of selector1 and match selector2
+- selector1 ~ selector2 - select all elements that are siblings of selector1 and match selector2
+- selector1 + selector2 - select the element that is immediately after selector1 and matches selector2
+- tagname[attribute] - select all elements with a particular attribute
+- [attribute=value] - select all elements with a particular attribute value
+- [attribute~=value] - select all elements with an attribute value containing a specific word
+- [attribute|=value] - select all elements with an attribute value starting with a specific value
+- [attribute^=value] - select all elements with an attribute value starting with a specific value
+- [attribute$=value] - select all elements with an attribute value ending with a specific value
+- [attribute*=value] - select all elements with an attribute value containing a specific value
+- p:first-child - select the first child of a parent element
+- p:not(selector) - select all elements that do not match a specific selector
+- Using the elect method:
+- - soup.select('a') - select all a elements
+- - soup.select('#info') - select the element with id info
+- - soup.select(div.classname) - select all div elements with the class classname
+- The CSS selector rule engine in BeautifulSoup is not as powerful as the one found in a modern web browser.
+- Some complex selectors might not work
+- Use pyquery, parsel or Selenium for more complex CSS selectors
+
+## More Beautiful Soup Examples 
+
+```python
+import requests
+from bs4 import BeautifulSoup
+
+page = 1
+results = []
+
+while True:
+    print('Scraping page', page)
+    p = requests.get('http://books.toscrape.com/catalogue/page-{}.html'.format(page))
+    page += 1
+    if p.status_code == 404:
+        break
+    soup = BeautifulSoup(p.text, 'html.parser')
+    books = soup.select('.product_pod')
+    for book in books:
+        book_title = book.find('img').get('alt')
+        book_link = book.find('a').get('href')
+        book_rating = book.find(class_='star-rating').get('class')
+        book_price = book.find(class_='price_color').get_text(strip=True)
+        results.append({
+            'book_title': book_title,
+            'book_link': book_link,
+            'book_rating': book_rating,
+            'book_price': book_price
+        })
+    print(p.encoding, p.headers)
+    
+page = 1
+results = []
+
+ratings = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five']
+
+while True:
+    print('Scraping page', page)
+    p = requests.get('http://books.toscrape.com/catalogue/page-{}.html'.format(page))
+    p.encoding = 'UTF-8'
+    page += 1
+    if p.status_code == 404:
+        break
+    soup = BeautifulSoup(p.text, 'html.parser')
+    books = soup.select('.product_pod')
+    for book in books:
+        book_title = book.find('img').get('alt')
+        book_link = book.find('a').get('href')
+        book_rating = ratings.index(book.find(class_='star-rating').get('class')[1])
+        book_price = book.find(class_='price_color').get_text(strip=True)
+        results.append({
+            'book_title': book_title,
+            'book_link': book_link,
+            'book_rating': book_rating,
+            'book_price': book_price
+        })
+        
+# Scraping Zalando
+
+import re
+url = 'https://www.zalando.co.uk/womens-clothing-dresses/'
+pages_to_crawl = 2
+headers = {
+    'User-Agent': 
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36'
+}
+
+for p in range(1, pages_to_crawl+1):
+    print('Scraping page:', p)
+    r = requests.get(url, params={'p' : p}, headers=headers)
+    html_soup = BeautifulSoup(r.text, 'html.parser')
+    for article in html_soup.find_all('z-grid-item', class_=re.compile('^cat_card')):
+        article_info = article.find(class_=re.compile('^cat_infoDetail'))
+        if article_info is None:
+            continue
+        article_name = article.find(class_=re.compile('^cat_articleName')).get_text(strip=True)
+        print(' -', article_name, article_info.get('href'))
+
+```
