@@ -1,3 +1,0 @@
-- JavaScript
-- Selenium
-- Selenium examples
