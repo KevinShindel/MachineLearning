@@ -119,8 +119,38 @@ content_comments = extract_content_and_comments(r.text)
 ```
 
 ## Commercial products
+- PAAS
+- - Import.io - a web-based platform that allows you to extract data from websites without writing any code
+- SAAS
+- - http://portia.scrapinghub.com/ - a visual scraping tool that lets you extract data from websites without writing any code
+- - https://parsehunb.com/ - a web scraping service that allows you to extract data from websites without writing any code
+- Full package
+- - http://kofax.com/data-integration-extraction - a web scraping tool that lets you extract data from websites without writing any code
+- - https://fminer.com/ - a visual web scraping tool that lets you extract data from websites without writing any code
+- Scraping helpers
+- - Proxy servers
+- - Cloud deployment
+- - Captcha cracking services
 
 ## Web scraping vs. web crawling
+- The difference between scraping and crawling is somewhat vague (many will use both terms interchangeably)
+- In general terms, the term crawler indicates a program's ability to navigate web pages on its own, perhaps event without a well-defined end-goal or purpose (also known as a spider)
+- Web Crawlers are heavily used by search engines like Google to retrieve contents for a URL, examine that page for other links, retrieve the URLs for those links, and so on.
+- Design chooses:
+- - In many cases, crawling will be restricted to a well-defined set of pages, e.g. a product pages of an online shop
+- - In other cases, you will restrict yorself to a single website, but do not have a clear target regarding information extraction in mind. Instead, you simple wanna to create 
+    a copy of site.
+- - You might want to keep your crawling very open ended. For example, you might wish to start from a series of keywords, Google each of them, crawl to the top ten results for 
+    every query and crawl those pages for table, images, articles and so on.
+- Think carefully about which data you actually want to gather.
+- Use a database to store the data you gather.
+- Separate crawling from scraping.
+- Stop early and often ( provide a way to stop the process)
+- Retry on aborts (provide a way to retry the process)
+- Crawling the queue (provide a way to prioritize the pages you want to crawl)
+- Parallel programming (provide a way to crawl multiple pages at once, and hence the need for a database to store the data)
+- Keep in mind the legal aspects of web scraping and crawling
+- Usage of pre-build APIs can be beneficial here
 
 ## Web scraping vs. AI and ML
 
