@@ -1,4 +1,4 @@
-## Other Python libraries and tools
+_## Other Python libraries and tools
 - Request libraries
 - - urllib - can deal with all things HTTP (included in Python standard library)
 - - httplib2 - comprehensive HTTP client library
@@ -153,15 +153,160 @@ content_comments = extract_content_and_comments(r.text)
 - Usage of pre-build APIs can be beneficial here
 
 ## Web scraping vs. AI and ML
+- To bypass Captcha you can use next technique:
+- - Text mining
+- - OCR
+- - Visual web scraping
+- - Computer vision
+- - Captcha cracking
+- - Used in heavy crawling projects where the scraper is the main product
 
 ## Web scraping vs. RPA
+- Robotic Process Automation (RPA) is a technology that uses software robots to automate repetitive tasks
+- - To automate simple back-end processes
+- - Second wave of automation
+- Many commercial web scraping tools have rebranded themselves as RPA tools
+- RPA: web scraping but also + PDF scraping + screen UI scrapping
+- Also a workflow oriented design
+- Maturity is typically better
+- - Though can still be tricky with complex sites
+- - Expensive licenses
+- - Maintenance required for workflow changes
+- - Also not 100% accurate (OCR, granular selection rules)
+- - But - interesting to consider given the use case
+
 
 ## <...> scraping
+- PDF scrapping?
+- - PDF to text tools
+- - PDF libraries (https://github.com/pmaupin/pdfrw)
+- - Tabula: for table extraction (https://tabula.technology/)
+- - Camelot (https://blog.socialcops.com/technology/engineering/camelot-python-library-pdf-data/)
+- OCR
+- - Tesseract (https://github.com/tesseract-ocr/tesseract)
+- Unstructured text
+- - Toolkits such as SpaCy, AllenNPL, nltk, gensim
+- Computer Vision
+- - OpenCV, TensorFlow, Keras (Using deep learning approaches to detect objects or scenes)
+- Screen scraping and instrumentation
+- - PyAutoGUI, Selenium, Puppeteer, AutoIt, Sikuli
+- - UiAutomation (https://pypi.org.project/UiAutomation/)
+- - Pywinauto (https://pywinauto.readthedocs.io/en/latest/)
+- - Automagica (https://automagica.readthedocs.io/en/latest/)
+- - WinAppDriver (Service to automate Windows application testing)
+- Mobile App Scraping 
+- - Using e.g. Android emulator combined with automation framework or screen scraping
+- Other proprietary web technologies
+- - Java applets - can be easily decompiled
+- - Flash - can be decompiled
+- - WebGL - still a relatively new technology, but can be scraped
 
 ## Legal concerns
+- The legal aspects of web scraping are complex and vary from country to country
+- hiq vs. LinkedIn scraping case (https://www.eff.org/cases/hiq-v-linkedin)
+- Facebook vs. Power Ventures (https://www.eff.org/cases/facebook-v-power-ventures)
+- Google vs. Microsoft (https://www.eff.org/cases/google-v-microsoft)
+- RyanAir vs. Screen Scraping (https://www.eff.org/cases/ryanair-v-screen-scraping)
+- Breach of Terms and Conditions
+- Copyright or Trademark Infringement
+- Computer Fraud and Abuse Act (CFAA)
+- Trespass to Chattels
+- Robots Exclusion Protocol (robots.txt)
+- The Digital Millennium Copyright Act (DMCA), CAN-SPAM Act 
+- The EU Database Directive of 1996
+- The Computer Misuse Act 1990 (UK)
+- General Data Protection Regulation (GDPR)
+- Article 13 and 11 of the EU Copyright Directive
+- Most of this can be summarized in:
+- - Copyright law
+- - Privacy law
+- - Breach of contract
+- Get written permission from the website owner
+- - The best way to avoid legal issues is to get written permission from a website's owner covering which data you can scrape and which extent
+- Check the website's terms of service
+- - These will often include explicit provisions against web scraping
+- Public information only
+- - If a site exposes info publicly, it's generally fair game
+- - Dont login into a site and scrape data
+- No personal information (privacy concerns)
+- Don't cause damage (hammer websites by request, overloading networks, etc.)
+- Copyrighted material (check carefully whether your scraping case would fall under far use and do not use copyrighted material for commercial purposes)
+- Check the robots.txt file
+- Allowed but no private information, no personal information, ni copyrighted material
 
 ## Web scraping as part of data science
+- A one-shot project where web scraping can offer valuable data?
+- - E.g. a single report or descriptive analysis
+- - Then not really a deployment or maintainability issue
+- A predictive model trained on web scraped data?
+- - Which features need to be refreshed?
+- - Puts extra pressure on production
+- - How long can we use the scraped data? What if the data source go down?
+- - GOGO - Get data, Organize data, Get data, Organize data
+- - When used in reporting context: same concerns in case reporting is continuous and repeated!
+- Typical issue: Why can't we use/ don't we have Facebook's data? ( consider internal data sources)
+- RPA has led in number of new job roles (robot supervisor, robot developer, idea champion)
+- Similar roles apply in a web scraping context multidisciplinary team including: 
+- - Database expert
+- - Programmers
+- - Data scientists
+- - Web Developers
+- - Compliance officer
+- - Data engineer
+- - Manager
+- Scope, scale and size depends on view on web scraping projects
+- - From strategic core of main business to tactical to simply operational or one-off projects
+- Consider buy versus build decision
+- - Build - initial training and setup cost, offers more flexibility in long run
+- - Buy - faster, less maintenance, less flexibility
+- - Both require stringent maintenance and monitoring
+- Saying no to:
+- - When there is no well-defined question ( e.g. we want to copy of Facebook)
+- - When the legal risk is deemed too high
+- - When technological capabilities are not available
+- - When there is no clear business case
 
 ## The cat and mouse game
+- Websites take increasingly more advanced measures to prevent scraping
+- - Rate limiting
+- - IP blocking
+- - Browser checks
+- - JS based checks
+- - HTML and JS obfuscation
+- - UI event fingerprinting
+- Avoidance techniques:
+- - Fake as much a possible: User-Agent, Referer, IP, headers, cookies
+- - Use proxy's or the cloud: but not all providers welcome scrapers, and not all websites like all providers
+- - Timing and retry strategies: slow down, randomize, use smart retries
+- - Captcha avoidance: text mining, OCR, visual web scraping, computer vision, captcha cracking
+- - Fake UI events (typing speed, mouse movements, scrolling)
+- Captcha service (2captcha, anti-captcha, deathbycaptcha)
+- Other Services (click farms, data entry services, Amazon Mechanical Turk)
+- To read:
+- - https://towardsdatascience.com/deep-learning-drops-breaking-captcha-20c8fc96e6a3
+- - https://medium.com/@ageitgey/how-to-break-a-captcha-system-in-15-minutes-with-machine-learning-dbebb035a710
+- - https://www.npr.org/sections/thetwo-way/2017/10/26/560082659/ai-model-fundamentally-cracks-captchas-scientists-say
+- Check whether the captcha appears every time, or only after some amount of time or every so often.
+- - https://www.f5.com/company/blog/detecting-phantomjs-based-visitors
+- - https://github.com/intoli/intoli-article-materials/blob/master/articles/making-chrome-headless-undetectable/README.md
+- - https://antoinevastel.com/bot%20detection/2017/08/05/detect-chrome-headless.html?utm_source=frontendfocus&utm_medium=email
 
 ## Closing best practices
+- Go for an API first (always check first whether the site you wish to scrape has an API)
+- Use the best tools (e.g. Scrapy, BeautifulSoup, Selenium)
+- Play nice (don't hammer a website with hundreds of requests per second, consider contacting the webmaster of the site and work out a way to work together)
+- Consider the user agent and refer (remember the User-Agent and Referer headers)
+- Web servers are picky (Whether it's URL parameters, headers or form data, some sites come with very picky and strange requirements regarding their ordering, presence and values)
+- Check your browser (start from a fresh session and use dev tools to follow along through the requests, if everythng goes well try to emulate the same behaviour as well, use 
+  curl and other CLI to debug difficult cases)
+- Before going for a full JS engine, consider internal APIs (often the data you want is already available in a more structured form)
+- Assume it will crash (the web is dynamic place, and websites change all the time. make sure to write scrapers in such a way that they provide early and detailed warnings when 
+  something goes wrong)
+- Crawling is hard (when writing an advance crawler you quickly need to incorporate a database deal with restarting scripts, monitoring, queue management, timestamps and so on)
+- Some tools are helpful, some aren't 
+- - There are various many companies offering 'cloud scraping' solutions like Scrapy
+- - The main benefit of using is that you can utilize their fleet of servers to quickly parallelize your scraping tasks
+- - Don't put too much trust in expensive GUE scraping tools, however in most cases thyey'll only work with basic pages, cannot deal with JS or will lead to construction of a 
+    scrapping pipeline that is hard to maintain.
+- Scraping is a cat-and-mouse game (websites will try to prevent you from scraping, and you will need to find ways to avoid their countermeasures)
+- Keep in mind the managerial and legal concerns, and where web scraping fits in your data science pipeline
