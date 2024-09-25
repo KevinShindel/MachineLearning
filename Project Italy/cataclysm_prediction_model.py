@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.tsa.holtwinters import ExponentialSmoothing, HoltWintersResults
 
-from SciKit.italy.utils import adjust_model
+from utils import adjust_model
 
 MAX_PREDICTION = 4
 
@@ -102,8 +102,10 @@ def forecasting_and_plotting(model: HoltWintersResults, df: pd.DataFrame) -> Non
     plt.ylabel('Total Damage')
     plt.show()
 
-    # TODO: This prediction does not make sense, because ML cannot predict catastrophes. It is not possible to predict
-    # TODO: Further development does not make sense, because the prediction is not possible. The model is not useful.
+    # TODO: This prediction does not make sense, because ML cannot predict catastrophes.
+    #  It is not possible to predict
+    # TODO: Further development does not make sense, because the prediction is not possible.
+    #  The model is not useful.
 
 
 if __name__ == '__main__':

@@ -1,8 +1,7 @@
+import numpy as np
 import pandas as pd
-from scipy import stats
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
-import numpy as np
 
 MAX_PREDICTION = 4
 

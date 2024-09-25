@@ -1,67 +1,72 @@
-## Software
- - Use https://colab.research.google.com/ as platform for running the code.
-## Setting up your environment
-- Install Jypyter Notebook on your local machine.
+## Overview
 
-## From If-then rules to deep learning.
-- Expert-based rules
-- - Obtained from business experts using knowledge elicitation techniques.
-- - Subjective but not always to be frowned upon as inferior
-- - Still remains popular in many settings.
+## Deep Learning Software
+- Popular software frameworks for Deep Learning
+- - **PyTorch** (Facebook) - https://pytorch.org/
+- - **TensorFlow** (Google) - https://www.tensorflow.org/
+- - **Keras** (Google) - https://keras.io/
+- - **Apache** **MXNet** (Amazon) - https://mxnet.apache.org/
+- - **Theano** (University of Montreal) - http://www.deeplearning.net/software/theano/
+- - **Caffe** (Berkeley Vision and Learning Center) - http://caffe.berkeleyvision.org/
+- - **Chainer** (Preferred Networks) - https://chainer.org/
+- - **CNTK** (Microsoft) - https://docs.microsoft.com/en-us/cognitive-toolkit/
+- - Intel Data Analytics Acceleration Library (Intel) - https://software.intel.com/en-us/intel-daal
+- - **MATLAB** + Neural Network Toolbox (MathWorks) - https://www.mathworks.com/products/neural-network.html
+- - **Fast AI** (Fast AI) - https://www.fast.ai/
+- - **SciKit** Learn (Python) - https://scikit-learn.org/stable/
+- - **SAS** (SAS) - https://www.sas.com/en_us/software/analytics/machine-learning.html
+- - **DeepLearning4J** (Skymind) - https://deeplearning4j.org/
+- - Apache **Spark MLlib** (Apache) - https://spark.apache.org/mllib/
+- - **H2O.ai** (H2O.ai) - https://www.h2o.ai/
+- - Apache **SINGA** (Apache) - http://singa.apache.org/
+- - **Lasagna** (Lasagne) - https://lasagne.readthedocs.io/en/latest/
+- - **Blocks** (DeepMind) - https://blocks.readthedocs.io/en/stable/
+- - **Nervana** Systems (Intel) - https://www.intel.ai/nervana/
+- - **Leaf** (Leaf) - ?
 
-- Data-based rules
-- - Obtained from data using analytical techniques
-- - Confirmatory vs. novel patterns
-- - White vs Black box models, shallow vs deep models.
+- **PyTorch** is computational ML framework with an API written in LUA and C++.
+- - Its powerful functionality saw interest from e.g. Facebook, Twitter, and Uber.
+- - use of LUA was a drawback to spur wide adoption.
+- - PyTorch is open-source and has a Python API, was invented in 2016 by Facebook.
+- - Offers dynamic computation graphs, which are more flexible than TensorFlow's static graphs.
+- - has become a favorite among researchers and practitioners.
+- - Seen as relatively complex for newcomers.
+- - Adoption in industry is growing.
 
-- Structured, 'tabular' data
-- - Traditional 'shallow' modelling techniques usually perform well
-- - Logistic regression, SVM, Decision Trees, Ensemble models
+- **TensorFlow** is a computational ML framework with an API written in C++.
+- - Written in C++ and Python, it was invented in 2015 by Google.
+- - GPU support is built-in, focus on fast handling of multidimensional arrays.
+- - Very popular in industry, especially for production systems.
 
-- Examples:
-- - Churn prediction
-- - Customer segmentation
-- - CLV forecasting
-- - Fraud detection
+- **Keras** is a deep-learning lib that sits on top of TensorFlow, Theano or CNTK.
+- - Provides a high-level, easy API inspired by Torch above these 'backends'
+- - Created in 2015 by François Chollet, it is now part of TensorFlow.
+- - Chosen as an officially high-level API for TensorFlow by Google.
+- - Easy way to get started for newcomers.
 
-- DL not necessarily better in such cases
-- As data complexity increases, artificial NN tend to be more performant in capturing patterns: Manual vs Auto feature engineering
-- For very complex input data, ANN with a small number of hidden layers become inaccurate
-- - E.g. images, sound, video, text...
-- - For this type of data, deep ANNs, which are ANNs with more layers and more complex architectures are currently the most performant algorithms.
+### Honorable mentions
+- CNTK is Microsoft's deep-learning framework (known now as Microsoft Cognitive Toolkit).
+- - Offers a Python API over C++ code.
+- - Microsoft recently announced that they will focus on Keras and TensorFlow.
+- Caffe2 was the long-awaited successor to the original Caffe framework.
+- - The second deep-learning framework to the backend by Facebook after Torch.
+- - Not much in use these days (replaced by PyTorch).
+- Sonnet was designed and built by DeepMind.
+- - Library on top of the TensorFlow framework.
+- Chainer is another Python-based deep-learning framework.
+- - Supported by IBM, Intel, and Microsoft.
+- - Main benefit is its flexibility, multi-GPU support, and dynamic computation graphs.
+- MxNet is a deep-learning framework that is supported by Amazon.
+- - R, Python, Scala, Julia, and C++ APIs are available.
+- - Fast and flexible, it is used by Amazon for their AWS services.
+- - Gluon as an API over Amazon     MXNet.
+- - Has not found that much adoption outside existing Amazon services.
 
-- Artificial NN have benn around for quite some time
-- - Possibility to create 'deeper' networks was known about for quite some time
+## Setting Up Your Environment
 
-- Current retrieval triggered by:
-- - Increase of computing power: emergence of GPUs/TPUs, parallel and cloud computing
-- - Huge volumes of new data types: images, text, audio, video...
-- - Software support: TensorFlow, PyTorch, Keras
-- - New use cases: medical, finance, logistics, retail.
-
-- The goal is to create algorithms that can take in very unstructured data, like images, audio waves or text blocks and predict the properties of those inputs.
-
-### Comparing Deep Learning with Traditional Techniques
-- Traditional algorithms best for small amount of data
-- Deep learning is better for huge amount of data.
-
-|                     | Traditional Algorithms                          | Deep Learning                                                     |
-|---------------------|-------------------------------------------------|-------------------------------------------------------------------| 
-| Accuracy            | Fair to good (on structured data)               | Good to excellent                                                 |
-| Training time       | Short (seconds) to medium (hours)               | From medium to long (weeks)                                       | 
-| Data Requirements   | Limited                                         | High                                                              |
-| Feature engineering | manual trends features, windowing, aggregations | Auto, done by model                                               |
-| Hyper-parameters    | Few to some (depending on algorithm )           | Many ( arch, num of layers, activation, optimizer )               |
-| Interpretability    | High (white-box models) to reasonable           | Low (black-box model, though some explanations can be extracted ) |
-| Cost and OpEx       | Low to reasonable                               | Reasonable to high (GPU, cloud, parralel computing )              |
-
-### A Brief History of Deep Learning
-
-- The beginnings: an electronic brain (1940s)
-- The beginnings: the perceptron (1950s)
-- From a golden age to an 'AI winter' (1960-1980s)
-- Backpropagation to the rescue (1980-1990s)
-- A second AI winter (1990-2000)
-- Deep Learning (2000s)
-- Deep Learning Unleashed (2010s)
-- An Future of AI "Great AI awakening" (2020 and ahead)
+1. Locally on your computer (GPU/CPU, Python3, TensorFlow 2)
+2. Online
+- - Google ML https://cloud.google.com/products/machine-learning/, Colab https://colab.research.google.com/
+- - Amazon SageMaker https://aws.amazon.com/sagemaker/, ML https://aws.amazon.com/machine-learning/
+- - Microsoft Azure ML https://azure.microsoft.com/en-us/services/machine-learning/
+- - Other Paperspace Gradient https://gradient.paperspace.com/, FloydHub https://www.floydhub.com/, IBM Watson Studio https://www.ibm.com/cloud/watson-studio, Kaggle Kernels https://www.kaggle.com/kernels
