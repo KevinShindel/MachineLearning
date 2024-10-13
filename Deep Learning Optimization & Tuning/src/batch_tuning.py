@@ -1,4 +1,4 @@
-from utils import base_model_config, get_data, create_and_run_model, plot_graph
+from .utils import base_model_config, get_data, create_and_run_model, plot_graph
 
 
 def iteration_experiment():

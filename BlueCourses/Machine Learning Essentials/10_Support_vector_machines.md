@@ -88,7 +88,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.model_selection import train_test_split
 
 hmeq = pd.read_csv('hmeq.csv')

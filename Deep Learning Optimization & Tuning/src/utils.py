@@ -4,6 +4,7 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
+from sklearn.datasets import load_iris
 
 
 def get_rca_data() -> tuple:
@@ -53,15 +54,19 @@ def base_model_config():
 
 
 def get_data():
-    iris_data = pd.read_csv("../files/iris.csv")
+    iris_data = load_iris(as_frame=True)
+
+    # Convert the data to a Pandas DataFrame
+    iris_df = pd.DataFrame(data=iris_data.data, columns=iris_data.feature_names)
+
 
     # Use a Label encoder to convert String to numeric values for the target variable
     label_encoder = preprocessing.LabelEncoder()
-    iris_data['Species'] = label_encoder.fit_transform(
-        iris_data['Species'])
+    iris_df['Species'] = label_encoder.fit_transform(
+        iris_data['target'])
 
     # Convert input to numpy array
-    np_iris = iris_data.to_numpy()
+    np_iris = iris_df.to_numpy()
 
     # Separate feature and target variables
     X_data = np_iris[:, 0:4]
@@ -83,9 +88,9 @@ def create_and_run_model(model_config, X, Y, model_name):
     for layer in range(len(model_config["HIDDEN_NODES"])):
 
         if layer == 0:
+            model.add(keras.layers.Input(shape=(X.shape[1],)))
             model.add(
                 keras.layers.Dense(model_config["HIDDEN_NODES"][layer],
-                                   input_shape=(X.shape[1],),
                                    name="Dense-Layer-" + str(layer),
                                    kernel_initializer=model_config["WEIGHTS_INITIALIZER"],
                                    bias_initializer=model_config["BIAS_INITIALIZER"],
@@ -118,8 +123,9 @@ def create_and_run_model(model_config, X, Y, model_name):
                   optimizer=optimizer,
                   metrics=model_config["METRICS"])
 
-    print("\n******************************************************")
-    model.summary()
+    if model_config['VERBOSE'] > 0:
+        print("\n******************************************************")
+        model.summary()
 
     X_train, X_val, Y_train, Y_val = train_test_split(
         X, Y,
@@ -139,7 +145,7 @@ def create_and_run_model(model_config, X, Y, model_name):
 def plot_graph(accuracy_measures, title):
     import matplotlib.pyplot as plt
 
-    plt.figure(figsize=(15, 8))
+    plt.figure(figsize=(20, 12))
     for experiment in accuracy_measures.keys():
         plt.plot(accuracy_measures[experiment],
                  label=experiment,
@@ -169,3 +175,36 @@ def get_optimizer(optimizer_name, learning_rate):
             raise ValueError("Optimizer not supported")
 
     return optimizer
+
+## Building the final model
+def create_model(feature_numbers=0,
+                 number_of_predicted_columns=0,
+                 hidden_nodes=[32, 32],
+                 optimizer='rmsprop',
+                 learning_rate=0.001,
+                 regularizer=None, dropout_rate=(0.0),
+                                                                                                                                                                  normalization=None):
+    model = tf.keras.models.Sequential()
+    model.add(keras.layers.Input(shape=(feature_numbers, ))) # Add input layer
+
+    for nodes in hidden_nodes:
+        model.add(tf.keras.layers.Dense(nodes, activation='relu', kernel_regularizer=regularizer))
+        if normalization == 'batch':
+            model.add(tf.keras.layers.BatchNormalization())
+        model.add(tf.keras.layers.Dropout(dropout_rate))
+
+    model.add(tf.keras.layers.Dense(number_of_predicted_columns,
+                                    activation='softmax'))
+
+    if optimizer == 'rmsprop':
+        opt = tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
+    elif optimizer == 'adam':
+        opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    elif optimizer == 'sgd':
+        opt = tf.keras.optimizers.SGD(learning_rate=learning_rate)
+    elif optimizer == 'adagrad':
+        opt = tf.keras.optimizers.Adagrad(learning_rate=learning_rate)
+
+    model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
