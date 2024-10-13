@@ -38,8 +38,6 @@ def experiment_w_best_hyperparams():
 
     plot_graph(accuracy_measures, "Compare Batch Size and Epoch")
 
-    print(history.history["accuracy"])
-
 
 if __name__ == '__main__':
     iteration_layer_experiment()

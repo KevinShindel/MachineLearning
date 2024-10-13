@@ -21,7 +21,7 @@ def iterate_activation_functions():
 
 def experiment_w_best_hyperparams():
     accuracy_measures = {}
-    activation = 'tanh' # ReLU - 0.95 / tanh - 0.98
+    activation = 'tanh'  # ReLU - 0.95 / tanh - 0.98
     node_count = 32
     layer_count = 4
 

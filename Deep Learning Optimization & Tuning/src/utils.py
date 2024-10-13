@@ -1,34 +1,29 @@
 import keras
 import pandas as pd
+from keras.src.layers import Dense, BatchNormalization, Input
+from keras.src.optimizers import SGD, Adagrad, RMSprop, Adam
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 from sklearn.datasets import load_iris
+from tensorflow.keras import models as k_models
 
 
 def get_rca_data() -> tuple:
     """
     This function loads the root cause analysis data and returns the feature and target variables.
     """
-    symptom_data = pd.read_csv("../files/root_cause_analysis.csv")
-    from sklearn import preprocessing
+    symptom_data = pd.read_csv("../dataset/root_cause_analysis.csv", index_col='ID')
 
     label_encoder = preprocessing.LabelEncoder()
     symptom_data['ROOT_CAUSE'] = label_encoder.fit_transform(
         symptom_data['ROOT_CAUSE'])
 
-    # Convert Pandas DataFrame to a numpy vector
-    np_symptom = symptom_data.to_numpy().astype(float)
+    X = symptom_data.drop('ROOT_CAUSE', axis=1)
+    y = symptom_data['ROOT_CAUSE']
 
-    # Extract the feature variables (X)
-    X_data = np_symptom[:, 1:8]
-
-    # Extract the target variable (Y), convert to one-hot-encoding
-    Y_data = np_symptom[:, 8]
-    Y_data = tf.keras.utils.to_categorical(Y_data, 3)
-
-    return X_data, Y_data
+    return X, y
 
 
 def base_model_config():
@@ -83,23 +78,23 @@ def get_data():
 
 
 def create_and_run_model(model_config, X, Y, model_name):
-    model = tf.keras.models.Sequential(name=model_name)
+    model = k_models.Sequential(name=model_name)
 
     for layer in range(len(model_config["HIDDEN_NODES"])):
 
         if layer == 0:
             model.add(keras.layers.Input(shape=(X.shape[1],)))
             model.add(
-                keras.layers.Dense(model_config["HIDDEN_NODES"][layer],
-                                   name="Dense-Layer-" + str(layer),
-                                   kernel_initializer=model_config["WEIGHTS_INITIALIZER"],
-                                   bias_initializer=model_config["BIAS_INITIALIZER"],
-                                   kernel_regularizer=model_config["REGULARIZER"],
-                                   activation=model_config["HIDDEN_ACTIVATION"]))
+                Dense(model_config["HIDDEN_NODES"][layer],
+                      name="Dense-Layer-" + str(layer),
+                      kernel_initializer=model_config["WEIGHTS_INITIALIZER"],
+                      bias_initializer=model_config["BIAS_INITIALIZER"],
+                      kernel_regularizer=model_config["REGULARIZER"],
+                      activation=model_config["HIDDEN_ACTIVATION"]))
         else:
 
             if model_config["NORMALIZATION"] == "batch":
-                model.add(keras.layers.BatchNormalization())
+                model.add(BatchNormalization())
 
             if model_config["DROPOUT_RATE"] > 0.0:
                 model.add(keras.layers.Dropout(model_config["DROPOUT_RATE"]))
@@ -164,47 +159,35 @@ def get_optimizer(optimizer_name, learning_rate):
 
     match optimizer_name:
         case 'sgd':
-            optimizer = keras.optimizers.SGD(learning_rate=learning_rate)
+            optimizer = SGD(learning_rate=learning_rate)
         case 'adagrad':
-            optimizer = keras.optimizers.Adagrad(learning_rate=learning_rate)
+            optimizer = Adagrad(learning_rate=learning_rate)
         case 'rmsprop':
-            optimizer = keras.optimizers.RMSprop(learning_rate=learning_rate)
+            optimizer = RMSprop(learning_rate=learning_rate)
         case 'adam':
-            optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
+            optimizer = Adam(learning_rate=learning_rate)
         case _:
             raise ValueError("Optimizer not supported")
 
     return optimizer
 
-## Building the final model
-def create_model(feature_numbers=0,
-                 number_of_predicted_columns=0,
-                 hidden_nodes=[32, 32],
-                 optimizer='rmsprop',
-                 learning_rate=0.001,
-                 regularizer=None, dropout_rate=(0.0),
-                                                                                                                                                                  normalization=None):
-    model = tf.keras.models.Sequential()
-    model.add(keras.layers.Input(shape=(feature_numbers, ))) # Add input layer
 
-    for nodes in hidden_nodes:
-        model.add(tf.keras.layers.Dense(nodes, activation='relu', kernel_regularizer=regularizer))
-        if normalization == 'batch':
-            model.add(tf.keras.layers.BatchNormalization())
-        model.add(tf.keras.layers.Dropout(dropout_rate))
+def build_model(input_shape=(0, ), optimizer='adam', learning_rate=0.001):
+    _optimizer = get_optimizer(optimizer, learning_rate)
 
-    model.add(tf.keras.layers.Dense(number_of_predicted_columns,
-                                    activation='softmax'))
+    # Initialising the ANN
+    classifier = k_models.Sequential([
+        Input(shape=input_shape),
+        Dense(128, activation='relu'),
+        Dense(64, activation='relu'),
+        Dense(32, activation='relu'),
+        Dense(1, activation='softmax')
+    ])
 
-    if optimizer == 'rmsprop':
-        opt = tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
-    elif optimizer == 'adam':
-        opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
-    elif optimizer == 'sgd':
-        opt = tf.keras.optimizers.SGD(learning_rate=learning_rate)
-    elif optimizer == 'adagrad':
-        opt = tf.keras.optimizers.Adagrad(learning_rate=learning_rate)
+    # Compiling the ANN
+    classifier.compile(loss='mean_absolute_error',
+                       # optimizer=_optimizer,
+                       optimizer=Adam(0.001),
+                       metrics=['mean_absolute_error'])
 
-    model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
-    return model
-
+    return classifier

@@ -106,8 +106,6 @@ def forecast_emissions():
     # 1. Plot test data vs forecasted data
     sns.lineplot(df['emissions'], label='Real Emissions')
     sns.lineplot(test_forecast, label='Predicted Emissions')
-    # df['emissions'].plot(label='Real Emissions')
-    # test_forecast.plot(label='Predicted Emissions')
     plt.ylabel('Emission')
     plt.xlabel('Year')
     plt.title('Italy CO2 Emissions: Predicted vs Real 1860 - 2022')
@@ -152,12 +150,13 @@ def forecast_claims(e_df=None, w_df=None):
     all_in_df = claims_df.join([w_df, e_df], how='left')
 
     # lest watch the correlation between warming/emissions and gross
-    corr1 = all_in_df['emissions'].corr(all_in_df['gross']) # negative correlation: -0.477 - means that as emissions grow, gross index decreases
-    corr2 = all_in_df['avg_anomaly_temp'].corr(all_in_df['gross']) # positive correlation 0.26 - means that as temperature grows, gross index grows
+    corr1 = all_in_df['emissions'].corr(
+        all_in_df['gross'])  # negative correlation: -0.477 - means that as emissions grow, gross index decreases
+    corr2 = all_in_df['avg_anomaly_temp'].corr(
+        all_in_df['gross'])  # positive correlation 0.26 - means that as temperature grows, gross index grows
 
     print('Correlation between CO2 emissions and gross: ', corr1)
     print('Correlation between Warming and gross: ', corr2)
-
 
     # 6. Correlation matrix heatmap between warming, emissions and gross
     sns.heatmap(all_in_df[['emissions', 'gross']].corr(), annot=True)
@@ -221,7 +220,6 @@ def forecast_claims(e_df=None, w_df=None):
     plt.show()
     print(table_df)
 
-
     # 8. Plot the forecasted data
     forecast.plot(label='Predicted Gross Claims')
     plt.xlabel('Year')
@@ -258,4 +256,3 @@ if __name__ == '__main__':
     plt.show()
 
     forecast_claims(emission_df, warming_df)
-
