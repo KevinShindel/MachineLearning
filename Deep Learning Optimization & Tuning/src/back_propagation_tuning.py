@@ -19,9 +19,25 @@ def iteration_experiment():
 
 
 def experiment_w_best_hyperparams():
-    # TODO: Implement this function
-    pass
+    model_config = base_model_config()
+    X, Y = get_data()
+
+    model_config["NORMALIZATION"] = 'batch'
+    model_config["HIDDEN_NODES"] = [32] * 2
+    model_config["EPOCHS"] = 25
+    model_config["BATCH_SIZE"] = 16
+
+    model_name = "Normalization-batch"
+    history = create_and_run_model(model_config, X, Y, model_name)
+    plot_graph({model_name: history.history["accuracy"]},
+               "Compare Batch Size and Epoch")
+
+    accuracy_and_epoch = zip(history.history["accuracy"], history.epoch)
+    # best epoch by accuracy
+    best_epoch = max(accuracy_and_epoch, key=lambda x: x[0])[1]
+    print(f'Best epoch by accuracy: {best_epoch}')
 
 
 if __name__ == '__main__':
-    iteration_experiment()
+    # iteration_experiment()
+    experiment_w_best_hyperparams()

@@ -14,7 +14,6 @@ from utils import get_rca_data, base_model_config, create_and_run_model, plot_gr
 
 def predict_causes():
     # load data and process data
-    symptom_data = get_rca_data()
     accuracy_measures = {}
     layer_count = 2
 
