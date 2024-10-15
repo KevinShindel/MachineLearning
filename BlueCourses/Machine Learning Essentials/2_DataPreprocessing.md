@@ -288,7 +288,8 @@ iqr = q3 - q1
 maximum = q3 + 1.5 * iqr
 minimum = q1 - 1.5 * iqr
 # find outliers
-df = df[(df < minimum) & (df > maximum)]
+# TODO: Write to Bart to fix & to | 
+df = df[(df < minimum) | (df > maximum)]
 
 outlier_exist = np.all(df.isnull())
 print(f'Outliers exist: {not outlier_exist}')
