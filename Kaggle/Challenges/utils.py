@@ -32,3 +32,24 @@ def plot_mi_scores(scores):
     plt.barh(width, scores)
     plt.yticks(width, ticks)
     plt.title("Mutual Information Scores")
+
+
+def detect_outliers(df):
+
+    # select numerical columns
+    num_df = df.select_dtypes(include=[np.number])
+
+    q1 = num_df.quantile(0.25)
+    q3 = num_df.quantile(0.75)
+    iqr = q3 - q1
+
+    # calculate maximum and minimum
+    maximum = q3 + 1.5 * iqr
+    minimum = q1 - 1.5 * iqr
+
+    # find outliers
+    df = num_df[(num_df < minimum) | (num_df > maximum)]
+
+    outlier_exist = np.all(num_df.isnull())
+    print('Outliers exists: ', not outlier_exist)
+    return df
