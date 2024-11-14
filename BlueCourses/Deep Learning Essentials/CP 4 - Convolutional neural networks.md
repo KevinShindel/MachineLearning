@@ -92,7 +92,42 @@
 -> Transfer function -> Batch normalization -> Activation function -> Dropout
 -> Transfer function -> Batch normalization -> Dropout -> ReLU
 
+### Data augmentation
+- Increase size of training set through transformations
+- - Some popular augmentations are grayscale, horizontal flips, vertical flips, random crops, color jitters, translations, rotations, and much more
+- - By applying just a couple of these transformations to the training data, the model can learn to generalize to unseen data
+- Force the network to focus on important aspects of the image (prevents overfitting)
+- Sometimes also applied at prediction-time  to stabilize the output
+
+### ☞ Colored image classification with a CNN
+- looks at notebook 'dle_cnn_imagecifar.ipynb'
+
 ### Opening the black box
+- Layers activation:
+- - A straightforward visualization technique is to show activations of the network during forward pass
+- - For ReLU CNN networks, activations usually start out looking relatively blobby and dense , but as training progresses become sparser and more localized
+- Weight and feature visualization:
+- - The second common strategy is to visualize the weights of the network
+- - These are usually most interpretable in the first convolutional layer, which is looking directly at the raw pixel data, but it is possible to also show the filter weights deeper in the network    
+- - However, since the weight matrices are generally small and hard to understand, a common strategy is to find an input through optimization (e.g. gradient ascent) that maximizes the response of a particular filter
+- Retrieving images that maximally activate a neuron:
+- - Similarly, we can take our given set of images, feed them through the network and keep track of which images maximally activates a neuron or set of neurons
+- - We can then visualize those top-n images to get an understanding of what the neuron is looking for
+- Image occlusion:
+- - Suppose that a CNN classifiers an image as a dog
+- - How can we be certain that it's picking up on the dog in the image and not some cues from the background or other object?
+- - One way to investigate which part of the image a classification prediction comes from is by plotting the probability of the class of interest as a function of the position of an occluding objects.
+- - Iterate over regions of the image, set a patch of the image to be grey, and look at the probability difference of the class
+- - We can then visualize this as heat map. The darker the color, the more important the region is for the classification
+- Salient maps:
+- - An apporach with a similar goal is saliency maps
+- - Again, based on determing changes to a given imnput image which have the largest effect on the output, which can be optimized through SGD
+- - See -> https://github.com/raghakot/keras-vis
+- Embedding with e.g t-SNE or UMAP:
+- - CNNs can be interpreted as gradually transforming images into a representation in which the classes are separatable by a linear classifier
+- - We can get a rough idea about the topology of this space by embedding images into two dimensions so that their low-dimensional representation has approx. equal distances that their high-dimensional representation.
+- - To produce an embedding, we can take a set of images and use the CNN to extract the vector of outputs right before the final softmax layer
+- - We can then plug these into t-SNE or UMAP and get 2-dimensional vector for each image
 - LIME (Local Interpretable Model-agnostic Explanations) https://www.github.com/marcotcr/lime
 - An explanation is a local linear approximation of the model's behavior
 - While the model may be very complex globally, it is easier to approximate it around the vicinity of a particular instance
