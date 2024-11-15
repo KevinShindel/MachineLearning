@@ -92,26 +92,45 @@
 -> Transfer function -> Batch normalization -> Activation function -> Dropout
 -> Transfer function -> Batch normalization -> Dropout -> ReLU
 
-### Data augmentation
--
-
-### ☞ Colored image classification with a CNN
--
-
 ### Opening the black box
--
+- LIME (Local Interpretable Model-agnostic Explanations) https://www.github.com/marcotcr/lime
+- An explanation is a local linear approximation of the model's behavior
+- While the model may be very complex globally, it is easier to approximate it around the vicinity of a particular instance
+- While treating the model as a black box, LIME can explain any classifier
+
+- SHAP (SHapley Additive exPlanations) https://www.github.com/slundberg/shap
+- SHAP values provide a unified measure of feature importance
+- A unified approach to explain the output of any machine learning model
+- Connects game theory with local explanations
 
 ### ☞ Interpretability examples with a CNN
--
-
-### Further aspects
--
+- see notebook: 'dle_cnn_interpretability.ipynb'
 
 ### Transfer learning
--
+- A common misconception is that without huge amounths of data, you can't create effective deep learning models
+- Transfer learning is the process of taking pre-trained model and fine-tuning it on your dataset.
+- - Idea is that pre-trained model will act as feature extractor: you remove the last layer of the network and replace it with your own classifier and only retrain those 
+    weights while keeping the rest of the network weights fixed
+- - Or simply keep as it but retrain the last layer
+- - Lower layers of the network will detect features like edges, corners, etc. that are common to all images
+- https://www.teachablemachine.withgoogle.com/ - train an  image detector in your browser
+- Uses a pretrained model SqueezeNet on ImageNet (1000 classes)
+- - Hence, we get an output vector of size 1000 for any image
+- - When the user trains this system, simply store output vector for each image together with given class label
+- For a new image , look at k-nearest neighbors in the output space
+- - We then see for these neighbors which class they belong to (A, B, C) and simply derive the probabilities based on this set.
+- Works suprisingly well, even for images that are not in ImageNet
+- - The network might think of a lemon for a banana, but it will not think of a car
+- - When we give another banana picture to predict the network will think  lemon again
+- - We simply translate this to the user as 'its' a banana'
 
 ### ☞ Transfer learning with a CNN
--
+- See notebook: 'dle_cnn_transferlearning.ipynb'
+- https://www.norc.aut.ac.ir/its-data-repository/accident-images-analysis-dataset/
+- Data-set: accident-detection
+- - The aim of this is to detect the occurrence of accidents in images
+- - Folder 1 includes 2500 images with label 'without_accident'
+- - Folder 2 includes 23980 images with label 'with_accident'
 
 ### Variants
 -
