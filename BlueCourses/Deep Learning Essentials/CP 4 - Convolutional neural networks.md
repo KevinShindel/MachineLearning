@@ -148,7 +148,7 @@
     weights while keeping the rest of the network weights fixed
 - - Or simply keep as it but retrain the last layer
 - - Lower layers of the network will detect features like edges, corners, etc. that are common to all images
-- https://www.teachablemachine.withgoogle.com/ - train an  image detector in your browser
+- https://www.teachablemachine.withgoogle.com/ - train an image detector in your browser
 - Uses a pretrained model SqueezeNet on ImageNet (1000 classes)
 - - Hence, we get an output vector of size 1000 for any image
 - - When the user trains this system, simply store output vector for each image together with given class label
