@@ -217,10 +217,41 @@
 - Stylistic and artistic applications (photo filters, deep dreaming, artistic style transfer)
 
 ### Deep dream
--
+- Prediction is not always the end goal
+- Uses a CNN to find and enhance patterns in images, creating a dream-like appearance in the deliberately over-processed images
+- - Enhance an input image in such a way as to elicit a particular interpretation
+- - Start with an image full of random noise, then gradually tweak it based on outputs of the convolutional layers
+- Recall that convolutional layers outputs get excited (attain higher absolute values) when a corresponding pattern has been detected
+- - We can choose some layers to maximize depends primarily on whether we want to focus on lower or higher-level feature representations (or perhaps a combination)
+- Loss:
+- - Activation maximization loss
+- - Continuity loss 0 to give the image local coherence and avoid messy blurs
+- - L2 norm loss - prevent pixels from taking very high values
+- Start with an image as the original
+- scipy.optimize.fmin_l_bfgs_b(func, x0, fprime=None, args=(), approx_grad=0, bounds=None, m=10, factr=10000000.0, pgtol=1e-05, epsilon=1e-08, iprint=-1, maxfun=15000, maxiter=15000, disp=None, callback=None, maxls=20)
+- - func: function to minimize
+- - x0: initial guess
+- - fprime: gradient of the function
+- - args: additional arguments
+- - approx_grad: if the gradient is approximated
+- - bounds: bounds for the variables
+- - m: number of corrections to approximate the inverse hessian
+- - factr: termination factor
+- Simple optimization function to minimize loss, based on outputs of the network
+- - Broyden-Fletcher-Goldfarb-Shanno algorithm
+- - An iterative method for solving unconstrained nonlinear optimization problems
+- - With limited memory 
+- - And bounded constraints
+- We modify image by looking at the netwrok to maximize its convolutional features
+- - Fine tuning based on desired output possible
+- - Most pre-trained models can be used
+- We use some random jitter in every step to ad variety to the image, but many variations exist 
+- - Gaussian blur, contrast, etc.
+- - No jitter can lead to a very noisy image
+- - Use of octaves to generate high-resolution images
 
 ### ☞ Deep dreaming example
--
+- See notebook: 'dle_cnn_deepdream.ipynb'
 
 ### Artistic style transfer
 -
