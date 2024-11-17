@@ -142,7 +142,7 @@
 - see notebook: 'dle_cnn_interpretability.ipynb'
 
 ### Transfer learning
-- A common misconception is that without huge amounths of data, you can't create effective deep learning models
+- A common misconception is that without huge amounts of data, you can't create effective deep learning models
 - Transfer learning is the process of taking pre-trained model and fine-tuning it on your dataset.
 - - Idea is that pre-trained model will act as feature extractor: you remove the last layer of the network and replace it with your own classifier and only retrain those 
     weights while keeping the rest of the network weights fixed
@@ -154,7 +154,7 @@
 - - When the user trains this system, simply store output vector for each image together with given class label
 - For a new image , look at k-nearest neighbors in the output space
 - - We then see for these neighbors which class they belong to (A, B, C) and simply derive the probabilities based on this set.
-- Works suprisingly well, even for images that are not in ImageNet
+- Works surprisingly well, even for images that are not in ImageNet
 - - The network might think of a lemon for a banana, but it will not think of a car
 - - When we give another banana picture to predict the network will think  lemon again
 - - We simply translate this to the user as 'its' a banana'
@@ -168,19 +168,53 @@
 - - Folder 2 includes 23980 images with label 'with_accident'
 
 ### Variants
--
+- LeNet: the first successful application of CNN, developed by Yann LeCun in 1998
+- AlexNet: the first large-scale CNN that had a significant impact on the field, developed by Alex Krizhevsky in 2012
+- ZFNet: a variant of AlexNet, developed by Matthew Zeiler and Rob Fergus in 2013
+- GoogLeNet: a CNN developed by Google that won the ImageNet challenge in 2014
+- VGGNet: a CNN developed by the Visual Graphics Group at Oxford University in 2014
+- ResNet: a CNN developed by Microsoft Research in 2015 that won the ImageNet challenge
+- SqeezeNet: a CNN developed by DeepScale in 2016
+- Basic CNNs are useful for image classification, but there are many other tasks that can be solved with CNNs
+- For object localization, the goal is to produce bounding boxes around objects in an image
+- For object segmentation, the task is to output an outline of every object in an image
+- Multiple such object might be present in the image, complicating the problem
+- A basic CNN setup can also be used to localize objects of interest in preprocessing the data appropriately
+- At prediction, the model is queried at multiple locations in the image to find the most likely location of the object
+- One dimensional CNNs have been used for the text and time series data analysis as well
 
 ### ☞ Locating objects with a CNN
--
+- See notebook 'dle_cnn_localization.ipynb'
 
 ### Capsule networks
--
+- Geoffrey Hinton, the godfather of deep learning, has been working on a new type of neural network called capsule networks
+- - Also, introduce an algorithm, 'dynamic routing between capsules', that allows to train such a network
+- - Tries to remove standing issues of the traditional CNNs architecture
+- CNN learn filters, but have trouble to lean 'pose', 'composition' or 'shapes'
+- - Internal data representation of a CNN does not consider important spatial hierarchies between simple and complex objects
+- - Not strong notion of three-dimensional representation of objects, just filters
+- The idea of capsule networks is relatively simple
+- - But: computers were just not powerful enough to train them
+- - There was no algorithm to train them
+- New technique: dynamic routing between capsules
+- - Allows capsules to communicate with each other and create representations similar to scene graphs in computer graphics
 
 ### Adversarial attacks
--
+- Adversarial examples are inputs to machine learning models that an attacker has intentionally designed to cause the model to make a mistake
+- Recent studies have shown that any machine learning classifier can be tricked to gie incorrect predictions by adding small perturbations to the input
+- Lots of research going into how to make neural nets more robust against these attacks
+
 
 ### Use cases
--
+- Image classification, segmentation, object detection, and localization
+- Face recognition and classification
+- - Alibaba launched a facial recognition system for payments
+- - Beijing's subway system uses facial recognition to pay for tickets
+- - New AI can guess whether you're gay or straight from a photograph
+- - Facial Recognition Technology is used to identify missing persons
+- Pose and gait detection
+- Business applications, e.g. in insurance (take a picture of a car accident and get an estimate)
+- Stylistic and artistic applications (photo filters, deep dreaming, artistic style transfer)
 
 ### Deep dream
 -
