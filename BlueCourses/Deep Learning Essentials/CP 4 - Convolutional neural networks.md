@@ -254,7 +254,29 @@
 - See notebook: 'dle_cnn_deepdream.ipynb'
 
 ### Artistic style transfer
--
-
-### ☞ Artistic style transfer example
--
+- Prediction is not always the end goal
+- - Uses the featurization layers of a trained CNN to do style transfer
+- See notebook: 'dle_cnn_styletransfer.ipynb'
+- Content loss: difference between original image and combination image in a layer 1
+- - We use a single higher-level layer here
+- - Sum of squared errors
+- Style loss: difference combination and style image in layer 1
+- - Normalized based on number of feature maps and size of image
+- - Summed over different layers
+- - We mean to capture brush strokes and patterns, so we mainly use the lower layers, which capture low level features
+- - Difference based on the Gram matrix
+- - Some other statistics have been tried and work well, too.
+- Total variation loss: an optional thied loss to keep the generated image smooth 
+- Total loss: content loss + style loss + total variation loss
+- Start with the same image as the original (random noise or white image also possible)
+- scipy.optimize.fmin_l_bfgs_b(func, x0, fprime=None, args=(), approx_grad=0, bounds=None, m=10, factr=10000000.0, pgtol=1e-05, epsilon=1e-08, iprint=-1, maxfun=15000, maxiter=15000, disp=None, callback=None, maxls=20)
+- - func: function to minimize
+- - x0: initial guess
+- - fprime: gradient of the function
+- - args: additional arguments
+- - approx_grad: if the gradient is approximated
+- - bounds: bounds for the variables
+- The pre-trained model is not retrained at any point
+- Simple optimization func to minimize loss, based on outputs of the network
+- Stochastic gradient descent and other optimizers have been applied here as well
+- See also notebook: 'dle_cnn_styletransfertf2.ipynb'
