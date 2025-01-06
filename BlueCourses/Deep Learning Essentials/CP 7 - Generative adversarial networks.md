@@ -38,9 +38,6 @@
 ### ☞ Generating digits with a GAN, revisited
 - See notebook 'dle_gan_imagedigitsrevisited.ipynb'
 
-### Further aspects
--
-
 ### Variants
 - Wasserstein GAN (2017)
 - Use a better metric of distribution similarity
