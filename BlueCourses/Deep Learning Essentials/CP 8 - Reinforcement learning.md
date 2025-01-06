@@ -3,45 +3,6 @@
 - The env. exposes a state to the agent, with a number of possible actions the agent can perform
 - After each action, the agent receives feedback: a reward and next state of the env.
 
-### Concept 
--
-
-### Q learning 
-- Given one run the agent through an env. we can easily calculate the total reward for that episode
-- Given than, the total future reward from time point toward can be expressed as
-- Because the enviroment is stochastic it is common to use discontinued future reward instead
-- A good strategy for an agent would be to always choose an action that maximizes th future reward.
-- Define a function representing the maximum discontinued future reward when we perform action a in state s, and continue optimally from there
-- But: how can we esimate the score at the end of game?
-- - We know just the current state and action, and not the actions and reward coming after that
-- - We can't, Q is just a thoretical concept
-- We do know it would be optimal to pick the action with the highes Q value in a certain state
-
-
-### ☞ Q learning example 
--
-
-### Deep Q learning 
--
-
-### ☞ Deep Q learning example 
--
-
-### Further aspects 
--
-
-### Variants 
--
-
-### ☞ Double deep Q learning example 
--
-
-### Software 
--
-
-### Challenges 
--
-
 ### Reinforcement learning
 - Q learning attempts to solve the credit assigment problem
 - - Propagates rewards back in time, until decision point reached which was actual cause for obtained reward
@@ -53,7 +14,17 @@
 - - With probability e-choose a random action, otherwise go with the 'greedy' action with the highest Q-value
 - An adaptive approach is also possible 
 
-### Q learning
+
+### Q learning 
+- Given one run the agent through an env. we can easily calculate the total reward for that episode
+- Given than, the total future reward from time point toward can be expressed as
+- Because the enviroment is stochastic it is common to use discontinued future reward instead
+- A good strategy for an agent would be to always choose an action that maximizes th future reward.
+- Define a function representing the maximum discontinued future reward when we perform action a in state s, and continue optimally from there
+- But: how can we esimate the score at the end of game?
+- - We know just the current state and action, and not the actions and reward coming after that
+- - We can't, Q is just a thoretical concept
+- We do know it would be optimal to pick the action with the highes Q value in a certain state
 - See notebook: "dle-rl_qlearning.ipynb"
 
 ### Deep Q learning
@@ -64,13 +35,13 @@
 - We could represent our Q-func with a neural network, that takes state and action as input and output corresponding Q-value
 - According to the network, which action leads to the highes payoff in a given state?
 
-### Expericnce replay
+### Experience replay
 - Estimate the future reward in each state using Q-learning and approximate the Q-function using a neural network
 - It turns out that approximation of Q-values using non-linear function is not very stable
 - - Not easy to converge and takes a long time
-- Hence experince replay is typically applied
-- - During gameplay all the experinces are stored in a 'replay memory'
-- - When training, random minibatches from replay memory are used instead of most recent transition
+- Hence, experience replay is typically applied
+- - During gameplay all the experiences are stored in a 'replay memory'
+- - When training, random mini-batches from replay memory are used instead of most recent transition
 - - This breaks the similarity of subsequent training samples, which otherwise might drive network into a local minimum
 - - Help avoid neural network to overly adjust its weights for the most recent state which may affect the action output of other states
 
