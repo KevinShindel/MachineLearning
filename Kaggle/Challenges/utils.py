@@ -3,7 +3,7 @@ from sklearn.metrics import classification_report, accuracy_score, confusion_mat
 import matplotlib.pyplot as plt
 from pandas import Series
 import numpy as np
-
+import seaborn as sns
 
 def show_report(y_pred, y_test):
     report = classification_report(y_test, y_pred)
@@ -34,13 +34,12 @@ def plot_mi_scores(scores):
     plt.title("Mutual Information Scores")
 
 
-def detect_outliers(df):
-
+def detect_outliers(original_df):
+    df = original_df.copy()
     # select numerical columns
-    num_df = df.select_dtypes(include=[np.number])
 
-    q1 = num_df.quantile(0.25)
-    q3 = num_df.quantile(0.75)
+    q1 = df.quantile(0.25)
+    q3 = df.quantile(0.75)
     iqr = q3 - q1
 
     # calculate maximum and minimum
@@ -48,8 +47,43 @@ def detect_outliers(df):
     minimum = q1 - 1.5 * iqr
 
     # find outliers
-    df = num_df[(num_df < minimum) | (num_df > maximum)]
+    filtered_df = df[(df < minimum) | (df > maximum)]
 
-    outlier_exist = np.all(num_df.isnull())
+    outlier_exist = np.all(filtered_df.isnull())
     print('Outliers exists: ', not outlier_exist)
-    return df
+    return filtered_df
+
+
+def normalize_num_data(data, columns):
+    for col in columns:
+        data[col] = data[col].fillna(data[col].mean())
+        q1 = data[col].quantile(0.25)
+        q3 = data[col].quantile(0.75)
+        iqr = q3 - q1
+
+        # calculate maximum and minimum
+        multiplier = 3
+        maximum = q3 + multiplier * iqr
+        minimum = max(0, q1 - multiplier * iqr)
+
+        data[col] = np.where(
+            data[col] > maximum,
+            maximum,
+            data[col]
+        )
+
+        data[col] = np.where(
+            data[col] < minimum,
+            minimum,
+            data[col]
+        )
+
+        skew = data[col].skew()
+
+        sns.histplot(data[col], kde=True)
+        plt.title(f'{col} Distribution (Skew: {skew:.2f})')
+        plt.xlabel(col)
+        plt.ylabel('Frequency')
+        plt.show()
+
+    return data
