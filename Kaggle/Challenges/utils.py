@@ -1,9 +1,12 @@
 from sklearn.feature_selection import mutual_info_regression
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, ConfusionMatrixDisplay, roc_curve, \
+    roc_auc_score
 import matplotlib.pyplot as plt
 from pandas import Series
 import numpy as np
 import seaborn as sns
+from sklearn.model_selection import cross_val_predict, StratifiedKFold
+
 
 def show_report(y_pred, y_test):
     report = classification_report(y_test, y_pred)
@@ -87,3 +90,65 @@ def normalize_num_data(data, columns):
         plt.show()
 
     return data
+
+
+def get_stats(model, X_val, y_val, X_train, y_train):
+    """
+    Description: Get model statistics including ROC curve, confusion matrix, and classification report for both validation and training datasets.
+    Args:
+        model: Trained machine learning model.
+        X_val: Validation feature set.
+        y_val: Validation target set.
+        X_train: Training feature set.
+        y_train: Training target set.
+    """
+
+    cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42, ) # Stratified K-Fold Cross-Validation
+    try: # Try to get decision function scores (for models that support it)
+        y_cross_val_predicted = cross_val_predict(model, X_val, y_val, cv=cv, method='decision_function')
+        y_cross_train_predicted = cross_val_predict(model, X_train, y_train, cv=cv, method='decision_function')
+    except: # Fallback to probability scores (for models that do not support decision function)
+        y_cross_val_predicted = cross_val_predict(model, X_val, y_val, cv=cv, method='predict_proba')[:, 1]
+        y_cross_train_predicted = cross_val_predict(model, X_train, y_train, cv=cv, method='predict_proba')[:, 1]
+
+    model_name = type(model).__name__ # Get the model name
+
+    fpr, tpr, thresholds = roc_curve(y_val, y_cross_val_predicted) # False Positive Rate, True Positive Rate, Thresholds
+    roc_score = roc_auc_score(y_val, y_cross_val_predicted) # ROC AUC Score
+
+    def get_conf_matrix(model_name, _y_val, y_pred):
+        """ Plot confusion matrix for the model."""
+        conf_matrix = confusion_matrix(_y_val, (y_pred > 0.5).astype(int))
+
+        plt.figure(figsize=(6, 4))
+        sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['Not Cancelled', 'Cancelled'],
+                    yticklabels=['Not Cancelled', 'Cancelled'])
+        plt.ylabel('Actual')
+        plt.xlabel('Predicted')
+        plt.title(f'{model_name} Confusion Matrix')
+        plt.show()
+
+    def plot_roc_curve(model_name, fpr, tpr, score):
+        """ Plot ROC curve for the model."""
+        plt.figure(figsize=(10, 5))
+        plt.plot(fpr, tpr, linewidth=2)
+        plt.plot([0, 1], [0, 1], 'k--')
+        plt.axis([0, 1, 0, 1])
+        plt.title(f'{model_name} ROC Curve (AUC = {score:.4f})')
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate (Recall)')
+        plt.grid(visible=True)
+        plt.show()
+
+    plot_roc_curve(model_name, fpr, tpr, roc_score) # Plot ROC curve
+    get_conf_matrix(model_name, y_val, y_cross_val_predicted) # Plot confusion matrix
+
+    # Print Validation classification report
+    report = classification_report(y_val, (y_cross_val_predicted > 0.5).astype(int))
+    print(f'{model_name} Validation Dataset Classification Report:')
+    print(report)
+
+    # Print Training classification report
+    report = classification_report(y_train, (y_cross_train_predicted > 0.5).astype(int))
+    print(f'{model_name} Training Dataset Classification Report:')
+    print(report)

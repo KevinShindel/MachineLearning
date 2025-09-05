@@ -7,7 +7,6 @@ Date: 2024-11-05
 # import libraries
 import matplotlib.pyplot as plt
 import pandas as pd
-import math
 import numpy as np
 
 
