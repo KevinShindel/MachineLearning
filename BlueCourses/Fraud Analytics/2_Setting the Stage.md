@@ -44,8 +44,27 @@
 - Imbalance: very skewed datasets, for credit card fraud 0.5% of transactions are fraudulent, needle in a haystack problem
 - Operational: huge volumes of data to be processed, in credit card < 8 sec. decision time
 - Avoid harassing good customers by blocking their transactions
+
 ## Fraud Analytics Approaches
+- Expert-based approach: based on experience and business intuition.
+- Supervised learning approach: based on historical data with known fraud labels.
+- Unsupervised learning approach: starts from an unlabeled dataset and performs anomaly detection.
+- Social network learning: learns fraudulent behaviour in a network of linked entities.
 
 ## Expert-Based Approach
+- builds upon exp, intuition and business or domain knowledge of the fraud analysts
+- Often implemented as rule base using a set of IF-THEN rules
+- Rule-based are expensive to build: expensive manual input required, needs to be kept up to date, human follow-up and investigation
+- Good start with expert-based approach before moving to "pure" ML approaches
+- Business policies can try to reduce risks involved in processing insurance claims by prescribing procedures and guidelines
+- Business policy excerpt 1 ( customer rel. management related)
+- Business policy excerpt 2 ( avoid financial losses )
+- Business policy excerpt 3 ( avoid financial losses ) - proposal of settlement and approval must be performed by diff. actors
+- Business policy excerpt 4 ( avoid financial losses ) - after approval of decision, no changes can occur
 
 ## Fraud Analytics Process Model
+
+[identify business problem] -> [Identify data] -> [Select Data] -> [Clean Data] -> [Transform Data] -> [Analyze Data] -> [Interpret, evaluate, deploy model]
+- Steps from Identify data to Transform data are **data pre-processing steps**
+- Steps from Analyze are **ML steps**
+- - Interpret, evaluate, deploy model are **post-processing steps**
