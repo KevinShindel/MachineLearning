@@ -14,6 +14,7 @@ from mlflow.models import ModelSignature
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class TaxiDurationPredictor(mlflow.pyfunc.PythonModel):
     """Model for predicting taxi ride duration."""
 
@@ -43,11 +44,13 @@ class TaxiDurationPredictor(mlflow.pyfunc.PythonModel):
             logger.error(f"Prediction error: {str(e)}")
             raise
 
+
 def create_model_signature():
     """Create model signature for input/output specifications."""
     model_input = json.dumps([{'name': 'total_amount', 'type': 'float'}])
     model_output = json.dumps([{'name': 'duration', 'type': 'float'}])
     return ModelSignature.from_dict({'inputs': model_input, 'outputs': model_output})
+
 
 def wait_for_server(url: str, timeout: int = 60):
     """Wait for server to be ready."""
@@ -63,7 +66,9 @@ def wait_for_server(url: str, timeout: int = 60):
                 raise TimeoutError("Server failed to start within timeout period")
             time.sleep(1)
 
+
 class ModelServer:
+
     def __init__(self, run_id: str, port: int = 5001):
         self.run_id = run_id
         self.port = port
@@ -99,6 +104,7 @@ class ModelServer:
             self.process.wait()
             logger.info("Model server stopped")
 
+
 def log_model_to_mlflow(model_path: str, tracking_uri: str = "http://127.0.0.1:5000") -> str:
     """Log model to MLflow with proper configuration."""
     try:
@@ -133,6 +139,7 @@ def log_model_to_mlflow(model_path: str, tracking_uri: str = "http://127.0.0.1:5
         logger.error(f"Error logging model to MLflow: {str(e)}")
         raise
 
+
 def handle_shutdown(server):
     """Handle graceful shutdown on SIGINT/SIGTERM."""
     def signal_handler(signum, frame):
@@ -142,6 +149,7 @@ def handle_shutdown(server):
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
+
 
 def main():
     MODEL_PATH = "model.pkl"  # Update this path as needed
@@ -166,7 +174,8 @@ def main():
 
         # Example of how to make a prediction
         logger.info("\nExample of how to make a prediction using curl:")
-        logger.info("""curl -X POST -H "Content-Type: application/json" -d "{\"inputs\": [20.0]}" http://127.0.0.1:""" + str(SERVE_PORT) + """/invocations""")
+        logger.info("""curl -X POST -H "Content-Type: application/json" -d "{\"inputs\": [20.0]}"
+         http://127.0.0.1:""" + str(SERVE_PORT) + """/invocations""")
 
         # Keep the main thread alive
         while True:
@@ -175,6 +184,7 @@ def main():
     except Exception as e:
         logger.error(f"Error: {str(e)}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

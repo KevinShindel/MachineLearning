@@ -13,6 +13,7 @@ mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment(EXPERIMENT_NAME)
 mlflow.sklearn.autolog()
 
+
 def train_and_log_model():
     # lets use Iris Data
     data = load_iris()
@@ -20,8 +21,11 @@ def train_and_log_model():
     y = data.target
     print('[+] Data loaded')
 
-    X_train, X_temp, y_train, y_temp = train_test_split(X, y, train_size=0.6) # Split train data 60%
-    X_test, X_validation, y_test, y_validation = train_test_split(X_temp, y_temp, train_size=0.5) # Split train and test data to 20% and 20% of original dataset
+    # Split train data 60%
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, train_size=0.6)
+
+    # Split train and test data to 20% and 20% of original dataset
+    X_test, X_validation, y_test, y_validation = train_test_split(X_temp, y_temp, train_size=0.5)
 
     # Define the parameter space
     param_distributions = {
@@ -70,6 +74,7 @@ def train_and_log_model():
 
         print('[+] Model trained')
         return random_search.best_estimator_, random_search.best_params_
+
 
 if __name__ == '__main__':
     model, params = train_and_log_model()

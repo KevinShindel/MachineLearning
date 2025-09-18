@@ -33,7 +33,6 @@ if __name__ == '__main__':
     df['Occupation'] = df['Occupation'].astype('category')
     df['Sex'] = df['Sex'].astype('category')
 
-
     # Make df Over-sampled
     over_sampled_df = pd.concat([df]*10, ignore_index=True)
 
@@ -59,7 +58,6 @@ if __name__ == '__main__':
     # Make df with irrelevant columns
     df_with_irrelevant_columns = df.copy()
     df_with_irrelevant_columns['Irrelevant Column'] = np.random.randint(0, 2, 1000)
-
 
     # count number of good and bad customers
     good = df['Good Customer'].value_counts()[1]
@@ -130,5 +128,3 @@ if __name__ == '__main__':
     print(df['Income'].var())
 
     # Missing Values techniques
-
-

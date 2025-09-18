@@ -54,6 +54,7 @@ def experiment_w_best_hyperparams():
 
     print(history.history["accuracy"])
 
+
 if __name__ == '__main__':
     # iteration_weights_experiment()
     experiment_w_best_hyperparams()

@@ -22,7 +22,7 @@ def create_model(df: pd.DataFrame) -> HoltWintersResults:
     test_max_year = max_year - MAX_PREDICTION
 
     # split the data into training and testing sets
-    test = df.loc[str(test_max_year):]
+    # test = df.loc[str(test_max_year):]
     train = df.loc[:str(test_max_year - 1)]
 
     # adjust the model
@@ -110,6 +110,6 @@ def forecasting_and_plotting(model: HoltWintersResults, df: pd.DataFrame) -> Non
 
 if __name__ == '__main__':
 
-    df = load_data() # load the data
-    model = create_model(df) # create a model
-    forecasting_and_plotting(model, df) # forecast and plot the data
+    df = load_data()  # load the data
+    model = create_model(df)  # create a model
+    forecasting_and_plotting(model, df)  # forecast and plot the data

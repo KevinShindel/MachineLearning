@@ -54,7 +54,6 @@ def get_data():
     # Convert the data to a Pandas DataFrame
     iris_df = pd.DataFrame(data=iris_data.data, columns=iris_data.feature_names)
 
-
     # Use a Label encoder to convert String to numeric values for the target variable
     label_encoder = preprocessing.LabelEncoder()
     iris_df['Species'] = label_encoder.fit_transform(
@@ -173,7 +172,6 @@ def get_optimizer(optimizer_name, learning_rate):
 
 
 def build_model(input_shape=(0, ), optimizer='adam', learning_rate=0.001):
-    _optimizer = get_optimizer(optimizer, learning_rate)
 
     # Initialising the ANN
     classifier = k_models.Sequential([
@@ -186,7 +184,6 @@ def build_model(input_shape=(0, ), optimizer='adam', learning_rate=0.001):
 
     # Compiling the ANN
     classifier.compile(loss='mean_absolute_error',
-                       # optimizer=_optimizer,
                        optimizer=Adam(0.001),
                        metrics=['mean_absolute_error'])
 

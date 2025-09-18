@@ -166,7 +166,8 @@ def forecast_claims(e_df=None, w_df=None):
     plt.savefig('assets/Italy_6.png', dpi=500)
     plt.show()
 
-    # we found that correlation between emissions and gross index is negative, so we need cant predict gross index based on emissions and warming
+    # we found that correlation between emissions and gross index is negative,
+    # so we need cant predict gross index based on emissions and warming
 
     # let`s predict gross index only by historical data
     gross_df = all_in_df['gross']
