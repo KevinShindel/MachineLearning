@@ -2,6 +2,8 @@ name: Python CI
 
 on: [push]
 
+permissions:
+  contents: read
 #on:
 #  push:
 #    branches: [ "main" ]
