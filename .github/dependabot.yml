@@ -7,5 +7,3 @@ updates:
     commit-message:
       prefix: "deps"
     open-pull-requests-limit: 5
-    # Включає авто-мердж від Dependabot
-#    auto-merge: true
