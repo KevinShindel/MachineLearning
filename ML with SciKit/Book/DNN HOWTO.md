@@ -77,3 +77,106 @@ history = model.fit(X_train,
 | Loss functions           | Sparse Categorical Crossentropy |
 | Optimizers               | SGD, Adam, RMSprop              |
 
+# Optimizers Explanation
+
+| Optimizer                        | Speed | Quality           | Description                                                                |
+|----------------------------------|-------|-------------------|----------------------------------------------------------------------------|
+| SGD                              | *     | ***               | Stochastic Gradient Descent, good for large datasets with low overfitting. |
+| SGD(lr=0.001, momentum=0.9)      | **    | ***               | SGD with momentum, faster convergence while maintaining quality.           |
+| SGD(momentum=0.9, nesterov=True) | **    | ***               | Nesterov Accelerated Gradient, improves convergence speed.                 |
+| AdaGrad                          | ***   | *(early stopping) | Adaptive Gradient Algorithm, good for sparse data.                         |
+| RMSprop                          | ***   | ** or ***         | Root Mean Square Propagation, effective for non-stationary objectives.     |
+| Adam                             | ***   | ** or ***         | Adaptive Moment Estimation, combines benefits of AdaGrad and RMSprop.      |
+| Nadam                            | ***   | ** or ***         | Nesterov-accelerated Adam, faster convergence with good quality.           |
+| AdaMax                           | ***   | ** or ***         | Variant of Adam based on the infinity norm, stable for large datasets.     |
+
+# Regularization Techniques
+
+| Technique            | Description                                                                         | Examples                                                      |
+|----------------------|-------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| Dropout              | Randomly drops neurons during training to prevent overfitting.                      | layers.Dropout(0.5)                                           |
+| L1 Regularization    | Adds a penalty equal to the absolute value of the magnitude of coefficients.        | regularizers.L1(0.01)                                         | 
+| L2 Regularization    | Adds a penalty equal to the square of the magnitude of coefficients.                | regularizers.L2(0.01)                                         |
+| L1_L2 Regularization | Combines L1 and L2 penalties to leverage benefits of both methods.                  | regularizers.L1L2(l1=0.01, l2=0.01)                           |
+| Batch Normalization  | Normalizes the inputs of each layer to stabilize learning and speed up convergence. | layers.BatchNormalization()                                   |
+| Early Stopping       | Stops training when the validation performance starts to degrade.                   | keras.callbacks.EarlyStopping(monitor='val_loss', patience=5) |
+
+# Example of DNN model with L2 regularization
+
+```python
+
+from functools import partial
+from tensorflow.keras import layers, activations, regularizers, models
+
+RegularizedDense = partial(layers.Dense,
+                         activation=activations.relu,
+                         kernel_initializer='he_normal',
+                         kernel_regularizer=regularizers.L2(0.01))
+
+
+model = models.Sequential([
+    layers.InputLayer(shape=[28, 28]),
+    layers.Flatten(),
+    RegularizedDense(300),
+    RegularizedDense(100),
+    layers.Dense(10, activation=activations.softmax)
+])
+```
+
+# Tuned Dropout Example
+
+```python
+from tensorflow.keras import layers, activations, models
+
+class MCDropout(layers.Dropout):
+    """
+     Monte Carlo Dropout layer that is active during training and inference.
+    """
+    def call(self, inputs):
+        return super().call(inputs, training=True)
+
+model = models.Sequential([
+    layers.InputLayer(shape=[28, 28]),
+    layers.Flatten(),
+    layers.Dense(300, activation=activations.relu),
+    MCDropout(0.5),
+    layers.Dense(100, activation=activations.relu),
+    MCDropout(0.5),
+    layers.Dense(10, activation=activations.softmax)
+])
+```
+
+# Max-Norm regularization Example
+
+```python
+from tensorflow.keras import layers, activations, regularizers, models, initializers, constraints
+
+
+layers.Dense(
+    n_units=100, 
+    activation=activations.relu,
+    kernel_initializer=initializers.he_normal,
+    kernel_constraint=constraints.max_norm(1.0) # max-norm constraint 
+)
+```
+
+# Standard DNN configuration
+
+| Hyperparameter         | Recommended Value  |
+|------------------------|--------------------|
+| Kernel Initializaztion | Xe initialization  |
+| Activation Function    | ELU                |
+| Normalization          | BatchNorm          |
+| Optimizer              | RMSProp / Nadam    |
+| Regularization         | EarlyStopping + L2 |
+| LR Plot                | One cycle          |
+
+# DNN with self-normalizing layers configuration
+
+| Hyperparameter         | Recommended Value |
+|------------------------|-------------------|
+| Kernel Initializaztion | LeCun normal      |
+| Activation Function    | SeLU              |
+| Regularization         | AlphaDropout      |
+| Optimizer              | RMSProp / Nadam   |
+| LR Plot                | One cycle         |
