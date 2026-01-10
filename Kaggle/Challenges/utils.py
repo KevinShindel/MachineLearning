@@ -11,6 +11,10 @@ import numpy as np
 import seaborn as sns
 from sklearn.model_selection import cross_val_predict, StratifiedKFold
 
+from optuna.study import StudyDirection
+from optuna import Study
+from optuna.trial import FrozenTrial
+
 
 def show_report(y_pred, y_test):
     report = classification_report(y_test, y_pred)
@@ -158,3 +162,42 @@ def get_stats(model, X_val, y_val, X_train, y_train):
     report = classification_report(y_train, (y_cross_train_predicted > 0.5).astype(int))
     print(f'{model_name} Training Dataset Classification Report:')
     print(report)
+
+
+class EarlyStoppingCallback:
+    """
+    Early stopping callback for Optuna studies.
+    Stops the study if there is no improvement in the best value for a specified number of trials (patience).
+    """
+    def __init__(self, patience: int, min_delta: float = 0.0):
+        """
+        Args:
+            patience (int): Number of trials to wait for improvement before stopping.
+            min_delta (float): Minimum change in the monitored value to qualify as an improvement.
+        """
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.best_value = None
+
+    def __call__(self, study: Study, trial: FrozenTrial):
+        if self.best_value is None:
+            self.best_value = study.best_value
+            return
+
+        if study.direction == StudyDirection.MINIMIZE:
+            if study.best_value < self.best_value - self.min_delta:
+                self.best_value = study.best_value
+                self.counter = 0
+            else:
+                self.counter += 1
+        else:
+            if study.best_value > self.best_value + self.min_delta:
+                self.best_value = study.best_value
+                self.counter = 0
+            else:
+                self.counter += 1
+
+        if self.counter >= self.patience:
+            study.stop()
+            print(f'Early stopping triggered after {self.counter} trials with no improvement.')
