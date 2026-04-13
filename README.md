@@ -2,7 +2,7 @@
 
 ### Algorithm Cheat Sheet
 
-<img src="ml_map.svg" alt="ml map" height="auto" width="80%" style="border-radius: 5px; background-color: white"/>
+<img src="assets/ml_map.svg" alt="ml map" height="auto" width="80%" style="border-radius: 5px; background-color: white"/>
 
 ## Table of Contents
 1. [EngX AI Learning](#module-1)
