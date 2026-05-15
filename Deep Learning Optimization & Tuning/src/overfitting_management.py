@@ -1,10 +1,10 @@
-from utils import base_model_config, get_data, create_and_run_model, plot_graph
+from utils import base_model_config, create_and_run_model, get_data, plot_graph
 
 
 def iteration_overfitting_experiment():
     accuracy_measures = {}
 
-    regularizer_list = ['l1', 'l2']
+    regularizer_list = ["l1", "l2"]
     for regularizer in regularizer_list:
         model_config = base_model_config()
         X, Y = get_data()
@@ -25,6 +25,6 @@ def experiment_w_best_hyperparams():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     iteration_overfitting_experiment()
     # experiment_w_best_hyperparams()

@@ -1,10 +1,10 @@
-from utils import base_model_config, get_data, create_and_run_model, plot_graph
+from utils import base_model_config, create_and_run_model, get_data, plot_graph
 
 
 def iterate_activation_functions():
     accuracy_measures = {}
 
-    activation_list = ['relu', 'sigmoid', 'tanh']
+    activation_list = ["relu", "sigmoid", "tanh"]
 
     for activation in activation_list:
         model_config = base_model_config()
@@ -21,7 +21,7 @@ def iterate_activation_functions():
 
 def experiment_w_best_hyperparams():
     accuracy_measures = {}
-    activation = 'tanh'  # ReLU - 0.95 / tanh - 0.98
+    activation = "tanh"  # ReLU - 0.95 / tanh - 0.98
     node_count = 32
     layer_count = 4
 
@@ -45,6 +45,6 @@ def experiment_w_best_hyperparams():
     print(history.history["accuracy"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # iterate_activation_functions()
     experiment_w_best_hyperparams()
