@@ -1,4 +1,4 @@
-from utils import base_model_config, get_data, create_and_run_model, plot_graph
+from utils import base_model_config, create_and_run_model, get_data, plot_graph
 
 
 def iteration_nodes_experiment():
@@ -47,6 +47,6 @@ def experiment_w_best_hyperparams():
     print(history.history["accuracy"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # iteration_nodes_experiment()
     experiment_w_best_hyperparams()

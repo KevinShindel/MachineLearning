@@ -1,6 +1,6 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 
 def main():
@@ -32,9 +32,7 @@ def main():
     plt.ylabel("Sales Amount", fontsize=18)
     plt.show()
 
-    fig, (ax1, ax2) = plt.subplots(
-        nrows=2, ncols=1, sharex=True, figsize=(12, 6)
-    )
+    fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=(12, 6))
     fig.tight_layout(pad=2)
     ax1.plot(df["date"], df["sales_amount"])
     ax2.plot(df["date"], df["discount"])
@@ -42,9 +40,7 @@ def main():
     ax2.set_ylabel("Discount", fontsize=18)
     plt.show()
 
-    fig, axs = plt.subplots(
-        nrows=2, ncols=1, sharex=True, figsize=(12, 6)
-    )
+    fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=(12, 6))
     fig.tight_layout(pad=2)
     axs[0].plot(df["date"], df["sales_amount"])
     axs[1].plot(df["date"], df["discount"])
@@ -53,5 +49,5 @@ def main():
     plt.show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

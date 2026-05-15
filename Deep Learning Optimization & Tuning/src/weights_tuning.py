@@ -1,19 +1,23 @@
-from DLOptimizationAndTuning.src.utils import base_model_config, get_data, create_and_run_model, plot_graph
+from DLOptimizationAndTuning.src.utils import (base_model_config,
+                                               create_and_run_model, get_data,
+                                               plot_graph)
 
 
 def iteration_weights_experiment():
     accuracy_measures = {}
 
-    initializer_list = ["random_normal",
-                        'zeros',
-                        'ones',
-                        "random_uniform",
-                        "he_normal",
-                        "he_uniform",
-                        "lecun_normal",
-                        "lecun_uniform",
-                        "glorot_normal",
-                        "glorot_uniform"]
+    initializer_list = [
+        "random_normal",
+        "zeros",
+        "ones",
+        "random_uniform",
+        "he_normal",
+        "he_uniform",
+        "lecun_normal",
+        "lecun_uniform",
+        "glorot_normal",
+        "glorot_uniform",
+    ]
 
     for initializer in initializer_list:
         model_config = base_model_config()
@@ -31,7 +35,7 @@ def iteration_weights_experiment():
 def experiment_w_best_hyperparams():
     accuracy_measures = {}
     initializer = "he_normal"
-    activation = 'tanh'
+    activation = "tanh"
     node_count = 32
     layer_count = 4
 
@@ -55,6 +59,6 @@ def experiment_w_best_hyperparams():
     print(history.history["accuracy"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # iteration_weights_experiment()
     experiment_w_best_hyperparams()
