@@ -28,6 +28,21 @@ jobs:
           isort .
           ruff check --fix . || true
 
+      - name: Configure git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create a PR with fixes
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "ci: run auto-formatters (black/isort/ruff)"
+          branch: ci/autofix
+          title: "ci: auto-format code (black/isort/ruff)"
+          body: |
+            This PR applies automatic formatting fixes from CI.
+
       - name: Create a PR with fixes
         uses: peter-evans/create-pull-request@v5
         with:
