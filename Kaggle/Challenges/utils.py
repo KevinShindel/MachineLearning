@@ -1,31 +1,27 @@
-from sklearn.feature_selection import mutual_info_regression
-from sklearn.metrics import (classification_report,
-                             accuracy_score,
-                             confusion_matrix,
-                             ConfusionMatrixDisplay,
-                             roc_curve,
-                             roc_auc_score)
 import matplotlib.pyplot as plt
-from pandas import Series
 import numpy as np
 import seaborn as sns
-from sklearn.model_selection import cross_val_predict, StratifiedKFold
-
-from optuna.study import StudyDirection
 from optuna import Study
+from optuna.study import StudyDirection
 from optuna.trial import FrozenTrial
+from pandas import Series
+from sklearn.feature_selection import mutual_info_regression
+from sklearn.metrics import (ConfusionMatrixDisplay, accuracy_score,
+                             classification_report, confusion_matrix,
+                             roc_auc_score, roc_curve)
+from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
 
 def show_report(y_pred, y_test):
     report = classification_report(y_test, y_pred)
-    print('Classification Report: \n', report)
-    print('Accuracy: \n', accuracy_score(y_test, y_pred))
+    print("Classification Report: \n", report)
+    print("Accuracy: \n", accuracy_score(y_test, y_pred))
     cm = confusion_matrix(y_test, y_pred)
     cmd = ConfusionMatrixDisplay(cm)
-    cmd.plot(cmap='viridis', text_kw={'color': 'black'})
+    cmd.plot(cmap="viridis", text_kw={"color": "black"})
 
     plt.show()
-    print('Confusion Matrix: \n', cm)
+    print("Confusion Matrix: \n", cm)
 
 
 # MI Scores functions
@@ -61,7 +57,7 @@ def detect_outliers(original_df):
     filtered_df = df[(df < minimum) | (df > maximum)]
 
     outlier_exist = np.all(filtered_df.isnull())
-    print('Outliers exists: ', not outlier_exist)
+    print("Outliers exists: ", not outlier_exist)
     return filtered_df
 
 
@@ -77,24 +73,16 @@ def normalize_num_data(data, columns):
         maximum = q3 + multiplier * iqr
         minimum = max(0, q1 - multiplier * iqr)
 
-        data[col] = np.where(
-            data[col] > maximum,
-            maximum,
-            data[col]
-        )
+        data[col] = np.where(data[col] > maximum, maximum, data[col])
 
-        data[col] = np.where(
-            data[col] < minimum,
-            minimum,
-            data[col]
-        )
+        data[col] = np.where(data[col] < minimum, minimum, data[col])
 
         skew = data[col].skew()
 
         sns.histplot(data[col], kde=True)
-        plt.title(f'{col} Distribution (Skew: {skew:.2f})')
+        plt.title(f"{col} Distribution (Skew: {skew:.2f})")
         plt.xlabel(col)
-        plt.ylabel('Frequency')
+        plt.ylabel("Frequency")
         plt.show()
 
     return data
@@ -112,41 +100,63 @@ def get_stats(model, X_val, y_val, X_train, y_train):
         y_train: Training target set.
     """
 
-    cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42, )  # Stratified K-Fold Cross-Validation
+    cv = StratifiedKFold(
+        n_splits=3,
+        shuffle=True,
+        random_state=42,
+    )  # Stratified K-Fold Cross-Validation
     try:  # Try to get decision function scores (for models that support it)
-        y_cross_val_predicted = cross_val_predict(model, X_val, y_val, cv=cv, method='decision_function')
-        y_cross_train_predicted = cross_val_predict(model, X_train, y_train, cv=cv, method='decision_function')
-    except Exception as err:  # Fallback to probability scores (for models that do not support decision function)
-        print(f'Error using decision_function: {err}. Falling back to predict_proba.')
-        y_cross_val_predicted = cross_val_predict(model, X_val, y_val, cv=cv, method='predict_proba')[:, 1]
-        y_cross_train_predicted = cross_val_predict(model, X_train, y_train, cv=cv, method='predict_proba')[:, 1]
+        y_cross_val_predicted = cross_val_predict(
+            model, X_val, y_val, cv=cv, method="decision_function"
+        )
+        y_cross_train_predicted = cross_val_predict(
+            model, X_train, y_train, cv=cv, method="decision_function"
+        )
+    except (
+        Exception
+    ) as err:  # Fallback to probability scores (for models that do not support decision function)
+        print(f"Error using decision_function: {err}. Falling back to predict_proba.")
+        y_cross_val_predicted = cross_val_predict(
+            model, X_val, y_val, cv=cv, method="predict_proba"
+        )[:, 1]
+        y_cross_train_predicted = cross_val_predict(
+            model, X_train, y_train, cv=cv, method="predict_proba"
+        )[:, 1]
 
     model_name = type(model).__name__  # Get the model name
 
-    fpr, tpr, thresholds = roc_curve(y_val, y_cross_val_predicted)  # FP Rate, TP Rate, Thresholds
+    fpr, tpr, thresholds = roc_curve(
+        y_val, y_cross_val_predicted
+    )  # FP Rate, TP Rate, Thresholds
     roc_score = roc_auc_score(y_val, y_cross_val_predicted)  # ROC AUC Score
 
     def get_conf_matrix(model_name, _y_val, y_pred):
-        """ Plot confusion matrix for the model."""
+        """Plot confusion matrix for the model."""
         conf_matrix = confusion_matrix(_y_val, (y_pred > 0.5).astype(int))
 
         plt.figure(figsize=(6, 4))
-        sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['Not Cancelled', 'Cancelled'],
-                    yticklabels=['Not Cancelled', 'Cancelled'])
-        plt.ylabel('Actual')
-        plt.xlabel('Predicted')
-        plt.title(f'{model_name} Confusion Matrix')
+        sns.heatmap(
+            conf_matrix,
+            annot=True,
+            fmt="d",
+            cmap="Blues",
+            xticklabels=["Not Cancelled", "Cancelled"],
+            yticklabels=["Not Cancelled", "Cancelled"],
+        )
+        plt.ylabel("Actual")
+        plt.xlabel("Predicted")
+        plt.title(f"{model_name} Confusion Matrix")
         plt.show()
 
     def plot_roc_curve(model_name, fpr, tpr, score):
-        """ Plot ROC curve for the model."""
+        """Plot ROC curve for the model."""
         plt.figure(figsize=(10, 5))
         plt.plot(fpr, tpr, linewidth=2)
-        plt.plot([0, 1], [0, 1], 'k--')
+        plt.plot([0, 1], [0, 1], "k--")
         plt.axis([0, 1, 0, 1])
-        plt.title(f'{model_name} ROC Curve (AUC = {score:.4f})')
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate (Recall)')
+        plt.title(f"{model_name} ROC Curve (AUC = {score:.4f})")
+        plt.xlabel("False Positive Rate")
+        plt.ylabel("True Positive Rate (Recall)")
         plt.grid(visible=True)
         plt.show()
 
@@ -155,12 +165,12 @@ def get_stats(model, X_val, y_val, X_train, y_train):
 
     # Print Validation classification report
     report = classification_report(y_val, (y_cross_val_predicted > 0.5).astype(int))
-    print(f'{model_name} Validation Dataset Classification Report:')
+    print(f"{model_name} Validation Dataset Classification Report:")
     print(report)
 
     # Print Training classification report
     report = classification_report(y_train, (y_cross_train_predicted > 0.5).astype(int))
-    print(f'{model_name} Training Dataset Classification Report:')
+    print(f"{model_name} Training Dataset Classification Report:")
     print(report)
 
 
@@ -169,6 +179,7 @@ class EarlyStoppingCallback:
     Early stopping callback for Optuna studies.
     Stops the study if there is no improvement in the best value for a specified number of trials (patience).
     """
+
     def __init__(self, patience: int, min_delta: float = 0.0):
         """
         Args:
@@ -200,4 +211,6 @@ class EarlyStoppingCallback:
 
         if self.counter >= self.patience:
             study.stop()
-            print(f'Early stopping triggered after {self.counter} trials with no improvement.')
+            print(
+                f"Early stopping triggered after {self.counter} trials with no improvement."
+            )

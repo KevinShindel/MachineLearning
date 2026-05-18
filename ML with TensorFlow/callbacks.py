@@ -1,35 +1,35 @@
-import tensorflow as tf
 import math
-
-from tensorflow.keras import callbacks
 import os
 import time
 
-log_folder = 'logs'
+import tensorflow as tf
+from tensorflow.keras import callbacks
+
+log_folder = "logs"
 root_logdir = os.path.join(os.curdir, log_folder)
 K = tf.keras.backend
 
 checkpoint_callback = callbacks.ModelCheckpoint(
     filepath=os.path.join(root_logdir, "models/my_keras_model.keras"),
-    save_best_only=True
+    save_best_only=True,
 )
 
 early_stopping_callback = callbacks.EarlyStopping(
-    patience=10,
-    restore_best_weights=True
+    patience=10, restore_best_weights=True
 )
+
 
 def get_run_logdir():
     run_id = time.strftime("run_%Y_%m_%d-%H_%M_%S")
     return os.path.join(root_logdir, run_id)
 
+
 # run_logdir = get_run_logdir() # example: "logs/run_2024_06_01-12_00_00"
 
 tensorboard_callback = callbacks.TensorBoard(
-    log_dir=get_run_logdir(),
-    histogram_freq=1,
-    profile_batch=0
+    log_dir=get_run_logdir(), histogram_freq=1, profile_batch=0
 )
+
 
 class ExponentialLearningRate(callbacks.Callback):
 
@@ -65,9 +65,9 @@ class StopDecayAfterEpoch(callbacks.Callback):
 
     def on_epoch_begin(self, epoch, logs=None):
         if epoch < self.stop_epoch:
-            new_lr = self.initial_lr * (self.decay_rate ** epoch)
+            new_lr = self.initial_lr * (self.decay_rate**epoch)
         else:
-            new_lr = self.initial_lr * (self.decay_rate ** self.stop_epoch)
+            new_lr = self.initial_lr * (self.decay_rate**self.stop_epoch)
 
         # Keras 2.13+/Keras 3: use `learning_rate` (not `.lr`)
         lr = self.model.optimizer.learning_rate
@@ -81,22 +81,12 @@ class StopDecayAfterEpoch(callbacks.Callback):
 
 
 stop_decay_after_epoch = StopDecayAfterEpoch(
-    initial_lr=1e-3,
-    decay_rate=0.9,
-    stop_epoch=10,
-    verbose=1
+    initial_lr=1e-3, decay_rate=0.9, stop_epoch=10, verbose=1
 )
 
 
 class CosineAnnealingStopAfterEpoch(tf.keras.callbacks.Callback):
-    def __init__(
-        self,
-        max_lr,
-        min_lr,
-        total_epochs,
-        stop_epoch,
-        verbose=1
-    ):
+    def __init__(self, max_lr, min_lr, total_epochs, stop_epoch, verbose=1):
         super().__init__()
         self.max_lr = max_lr
         self.min_lr = min_lr
@@ -107,7 +97,9 @@ class CosineAnnealingStopAfterEpoch(tf.keras.callbacks.Callback):
 
     def cosine_lr(self, epoch):
         cos_inner = math.pi * epoch / self.total_epochs
-        return self.min_lr + 0.5 * (self.max_lr - self.min_lr) * (1 + math.cos(cos_inner))
+        return self.min_lr + 0.5 * (self.max_lr - self.min_lr) * (
+            1 + math.cos(cos_inner)
+        )
 
     def on_epoch_begin(self, epoch, logs=None):
         if epoch < self.stop_epoch:
@@ -125,13 +117,11 @@ class CosineAnnealingStopAfterEpoch(tf.keras.callbacks.Callback):
         if self.verbose:
             print(f"\nEpoch {epoch+1}: Learning rate set to {lr_value:.6f}")
 
+
 cosine_annealing_stop_after_epoch = CosineAnnealingStopAfterEpoch(
-    max_lr=1e-3,
-    min_lr=1e-5,
-    total_epochs=50,
-    stop_epoch=20,
-    verbose=1
+    max_lr=1e-3, min_lr=1e-5, total_epochs=50, stop_epoch=20, verbose=1
 )
+
 
 class CyclicalLRStopAfterStep(tf.keras.callbacks.Callback):
     def __init__(
@@ -142,7 +132,7 @@ class CyclicalLRStopAfterStep(tf.keras.callbacks.Callback):
         stop_step,
         mode="triangular",
         gamma=1.0,
-        verbose=0
+        verbose=0,
     ):
         super().__init__()
         self.min_lr = min_lr
@@ -162,9 +152,9 @@ class CyclicalLRStopAfterStep(tf.keras.callbacks.Callback):
         scale = max(0, (1 - x))
 
         if self.mode == "triangular2":
-            scale /= (2 ** (cycle - 1))
+            scale /= 2 ** (cycle - 1)
         elif self.mode == "exp_range":
-            scale *= (self.gamma ** self.iteration)
+            scale *= self.gamma**self.iteration
 
         return self.min_lr + (self.max_lr - self.min_lr) * scale
 
@@ -185,7 +175,10 @@ class CyclicalLRStopAfterStep(tf.keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         if self.verbose:
-            print(f"Epoch {epoch+1} ended. Current LR: {K.get_value(self.model.optimizer.learning_rate):.6f}", end='\n')
+            print(
+                f"Epoch {epoch+1} ended. Current LR: {K.get_value(self.model.optimizer.learning_rate):.6f}",
+                end="\n",
+            )
 
 
 def get_clr(X_train, batch_size):
@@ -197,17 +190,14 @@ def get_clr(X_train, batch_size):
         stop_step=10 * steps_per_epoch,
         mode="triangular",
         gamma=1.0,
-        verbose=1
+        verbose=1,
     )
+
 
 cyclical_lr_stop_after_step = get_clr
 
 reduce_on_plateau_callback = callbacks.ReduceLROnPlateau(
-    monitor="val_loss",
-    factor=0.5,
-    patience=5,
-    min_lr=1e-6,
-    verbose=1
+    monitor="val_loss", factor=0.5, patience=5, min_lr=1e-6, verbose=1
 )
 
 
@@ -243,7 +233,9 @@ class OneCycleScheduler(tf.keras.callbacks.Callback):
         i = min(self.iteration, self.iterations)
 
         if i < self.phase1_end:
-            rate = self._interpolate(i, 0, self.phase1_end, self.start_rate, self.max_rate)
+            rate = self._interpolate(
+                i, 0, self.phase1_end, self.start_rate, self.max_rate
+            )
         elif i < self.phase2_end:
             rate = self._interpolate(
                 i, self.phase1_end, self.phase2_end, self.max_rate, self.start_rate
@@ -261,10 +253,7 @@ class OneCycleScheduler(tf.keras.callbacks.Callback):
         else:
             self.model.optimizer.learning_rate = rate
 
+
 one_cycle_scheduler = OneCycleScheduler(
-    iterations=1000,
-    max_rate=1e-3,
-    start_rate=1e-4,
-    last_iterations=100,
-    last_rate=1e-5
+    iterations=1000, max_rate=1e-3, start_rate=1e-4, last_iterations=100, last_rate=1e-5
 )

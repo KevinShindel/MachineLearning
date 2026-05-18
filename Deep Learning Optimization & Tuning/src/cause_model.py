@@ -9,7 +9,8 @@ IT Operations: Root Cause Analysis
 """
 
 # import libraries
-from utils import get_rca_data, base_model_config, create_and_run_model, plot_graph
+from utils import (base_model_config, create_and_run_model, get_rca_data,
+                   plot_graph)
 
 
 def predict_causes():
@@ -59,5 +60,5 @@ def experiment_w_hyperparams():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     predict_causes()
