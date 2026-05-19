@@ -1,16 +1,21 @@
-from colorlog import warning
 
 ### Simple workflow for creating Features in Databricks ML
 
 ```python
 from databricks.feature_engineering import FeatureEngineeringClient
+catalog_name = 'my_catalog'
+schema = 'my_database'
+features = ['gender', 'salary', 'tenure', 'TotalCharges']
+primary_key = 'customerID'
+
+telco_df = spark.table(f'{catalog_name}.{schema}.telco_data')
 
 # prepare feature set
 features_df = telco_df.select(primary_key, *features)
 
 # feature table definition
 fe = FeatureEngineeringClient()
-feature_table_name = f'{catalog_name}.{database_name}.telco_features'
+feature_table_name = f'{catalog_name}.{schema}.telco_features'
 
 # santity check 
 try:
@@ -108,3 +113,76 @@ with mlflow.start_run(run_name="Telco Churn Prediction") as mlflow_run:
     )
 
 ```
+
+### Use FeatureEngineeringClient to run inference
+
+```python
+from databricks.feature_engineering import FeatureEngineeringClient
+
+model_name = 'TelcoChurnModel'
+champion_model_uri = f'models:/{model_name}@champion'
+primary_key = 'customerID'
+
+fe = FeatureEngineeringClient()
+lookup_df = test_df.select(primary_key)
+
+predictions_df = fe.score_batch(
+    model_uri=champion_model_uri,
+    input_df=lookup_df,
+    result_type='string'
+)
+
+# before saving ito good to create optimized inference table with liquid clustering on relevant columns ( ex: customer_id, tenure )
+predictions_df.write.mode('append').option("mergeSchema", "true").saveAsTable(f'{catalog_name}.{database_name}.batch_inference_table')
+```
+
+
+### Feature Function
+
+- Feaure Function that uses a Python UDF to create on-demand features.
+
+```sql
+CREATE OR REPLACE FUNCTION mounthly_charges_avg(total_charges DOUBLE, tenure DOUBLE)
+RETURNS DOUBLE
+LANGUAGE PYTHON
+AS $$
+def monthly_charges_avg(total_charges, tenure):
+    if tenure == 0:
+        return 0.0
+    return total_charges / tenure
+$$;
+```
+
+#### Define combined features
+
+```python
+from databricks.feature_engineering import FeatureLookup, FeatureFunction, FeatureEngineeringClient
+
+fe = FeatureEngineeringClient()
+catalog_name = 'my_catalog'
+schema = 'my_database'
+features_for_online_name = f'{catalog_name}.{schema}.features_for_online'
+primary_key = 'customerID'
+feature_table_name = f'{catalog_name}.{schema}.telco_features'
+
+features = [
+    FeatureLookup(
+        table_name=feature_table_name,
+        lookup_key=primary_key
+    ),
+    FeatureFunction(
+        udf_name="mounthly_charges_avg",
+        name='monthly_charges_avg',
+        input_bindings={
+            'total_charges': f'{feature_table_name}.TotalCharges',
+            'tenure': f'{feature_table_name}.tenure'
+        }
+    )
+]
+
+# todo: find out last of code
+```
+
+- [Python API](https://docs.databricks.com/aws/en/machine-learning/feature-store/python-api)
+- [Databricks FeatureEngineeringClient](https://api-docs.databricks.com/python/feature-engineering/latest/feature_engineering.client.html)
+- [Databricks Feature Lookup](https://api-docs.databricks.com/python/feature-engineering/latest/ml_features.feature_lookup.html)

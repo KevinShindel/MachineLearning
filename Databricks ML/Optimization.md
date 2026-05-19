@@ -45,3 +45,10 @@ CREATE OR REPLACE TABLE batch_inference_table
        preiction STRING)
        CLUSTER BY (customer_id, tenure)
 ```
+
+### Manually Optimize table
+
+```sql
+ANALYZE TABLE batch_inference_table COMPUTE STATISTICS FOR ALL COLUMNS;
+OPTIMIZE batch_inference_table;
+```
