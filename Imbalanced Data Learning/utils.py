@@ -8,17 +8,12 @@ Description:
     It might also contain functions for data preprocessing, feature engineering, and evaluation metrics specific to imbalanced data learning.
 """
 
-
-import numpy as np
-from sklearn.neighbors import NearestNeighbors
-
-
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
 
 
 class Smote:
-    def __init__(self, k_neighbors=5, sampling_strategy='auto'):
+    def __init__(self, k_neighbors=5, sampling_strategy="auto"):
         """
         Multi-class SMOTE implementation.
 
@@ -39,7 +34,7 @@ class Smote:
         unique_classes, counts = np.unique(y, return_counts=True)
 
         # Determine target count for each class
-        if self.sampling_strategy == 'auto':
+        if self.sampling_strategy == "auto":
             target_count = np.max(counts)  # Balance to majority class
         else:
             target_count = self.sampling_strategy
@@ -58,7 +53,9 @@ class Smote:
             # Generate synthetic samples if needed
             if class_count < target_count:
                 n_samples_to_generate = target_count - class_count
-                synthetic_samples = self._generate_synthetic_samples(X_class, n_samples_to_generate)
+                synthetic_samples = self._generate_synthetic_samples(
+                    X_class, n_samples_to_generate
+                )
                 X_resampled.append(synthetic_samples)
                 y_resampled.append(np.full(n_samples_to_generate, class_label))
 
