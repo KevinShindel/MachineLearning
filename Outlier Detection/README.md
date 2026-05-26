@@ -6,6 +6,7 @@
 3. Outlier Transformation ( aka log transform )
 4. Winsorization ( aka data clippin`)
 5. Algorithmic Imputation
+6. Isolation Forest
 
 ## Techniques Description table
 
@@ -197,3 +198,21 @@ original_scale_data = scaler.inverse_transform(imputed_data)
 original_scale_df = pd.DataFrame(original_scale_data, columns=scaled_df.columns)
 ```
 
+### 6. Isolation Forest
+- Description: Isolation Forest based on DecisionTree model, and can predict possible anomalies by easy split some examples
+
+#### Concept
+
+```python
+from sklearn.ensemble import IsolationForest
+import pandas as pd
+
+df = pd.DataFrame([])
+anomaly_inputs = ['NPHI', 'RHOB'] # features to detect
+model = IsolationForest(contamination=0.01, # threshold which used for decision 
+                        random_state=32)
+model.fit(df[anomaly_inputs])
+
+df['anomaly_scores'] = model.decision_function(df[anomaly_inputs]) # probability of anomaly
+df['anomaly'] = model.predict(df[anomaly_inputs]) # flag field ( 1 for ok, -1 for anomaly )
+```
