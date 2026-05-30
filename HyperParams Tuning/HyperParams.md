@@ -8,3 +8,24 @@
 | Random Forest Regressor     | Optuna                  | 00:00:29      | 0.28       | 0.351      | 0.123      | 0.9898     | 50            | 
 | Random Forest Regressor     | Genetic Algorithm       | 00:01:22      | 0.2837     | 0.3483     | 0.1213     | 0.99       | 50            |
 | Random Forest Regressor     | Hyperopt                | 00:01:09      | 0.3239     | 0.39       | 0.154      | 0.987      | 50            |
+
+
+| Phase       | Dataset | Trials |
+| ----------- | ------- | ------ |
+| exploration | 50k     | 300    |
+| refinement  | 200k    | 100    |
+| final train | full    | 1      |
+
+
+```python
+from sklearn.utils import resample
+
+X_hpo, y_hpo = resample(
+    X_train,
+    y_train,
+    replace=False,
+    n_samples=100_000,
+    stratify=y_train,
+    random_state=42
+)
+```

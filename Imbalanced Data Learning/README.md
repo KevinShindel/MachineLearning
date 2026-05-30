@@ -2,27 +2,86 @@
 
 - [Official documentation](https://imbalanced-learn.org/stable/over_sampling.html)
 
+## Legend
 
-| SMOTE Variant                 | 	Best Use Case                                                | 	Main Strength                                                                     | 	When to Use                                                                         |
-|-------------------------------|---------------------------------------------------------------|------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| SMOTE (Standard)              | 	Moderately imbalanced continuous datasets                    | 	Balances classes using synthetic interpolated samples.                            | 	Use for numeric, low-noise datasets works as a general solution                     |
-| ADASYN (Adaptive SMOTE)       | 	Datasets with region-wise imbalance	                         | Generates adaptive synthetic data for hard-to-learn samples	                       | Use for hard to classify minority regions to improve boundary learning               |
-| Borderline SMOTE              | 	Minority samples close to class boundaries                   | 	Generates samples near decision boundaries to reduce misclassification	           | Use when classes overlap or boundaries are frequently confused                       |
-| SMOTE-ENN (Hybrid)            | 	Noisy datasets with misclassified or ambiguous samples       | 	Combines SMOTE and ENN to oversample and clean noisy instances                    | 	Use when the dataset has noise or outliers and we want a cleaner, balanced dataset. |
-| SMOTE-TOMEK (Hybrid)          | 	Datasets with overlapping classes needing clearer separation | 	Removes Tomek links post-SMOTE to reduce overlap and improve separation	          | Use when we want to improve boundary clarity after oversampling.                     |
-| SMOTE-NC (Nominal Continuous) | 	Datasets with both categorical and continuous features       | 	Handles mixed features via numeric interpolation and categorical mode assignment	 | Use for datasets with categorical columns not suited for purely numeric data         |
+#### Dataset Size
 
-### Advantages
-- Balances dataset by generating synthetic minority samples, improving model performance.
-- Reduces overfitting compared to simple duplication.
-- Works with various classifiers and high-dimensional data.
-- Variants (Borderline-SMOTE, ADASYN) adapt to different imbalance scenarios.
+- ⭐ = Small (<50k rows)
+- ⭐⭐ = Small–Medium
+- ⭐⭐⭐ = Medium (~50k–500k)
+- ⭐⭐⭐⭐ = Large (~500k–5M)
+- ⭐⭐⭐⭐⭐ = Very Large (millions+)
 
-### Limitations
-- Can amplify noise if minority class has noisy samples.
-- May blur class boundaries when classes overlap.
-- Higher computational cost for large datasets or complex variants.
-- Less effective for extreme class imbalance; relies on nearest neighbors.
+#### Speed
+
+- ⭐ = Very Slow
+- ⭐⭐ = Slow
+- ⭐⭐⭐ = Moderate
+- ⭐⭐⭐⭐ = Fast
+- ⭐⭐⭐⭐⭐ = Very Fast
+
+## Under-Sampling
+
+| Class Name                               | Type  | Dataset Size | Speed | Purpose                                   | Other                                |
+|------------------------------------------|-------|--------------|-------|-------------------------------------------|--------------------------------------|
+| `RandomUnderSampler`                     | Under | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐ | Fast reduction of majority class          | Industry standard for large datasets |
+| `NearMiss`                               | Under | ⭐⭐           | ⭐⭐    | Keep majority samples closest to minority | Distance-based, expensive            |
+| `TomekLinks`                             | Under | ⭐⭐           | ⭐⭐    | Remove overlapping majority samples       | Good cleanup before modeling         |
+| `EditedNearestNeighbours (ENN)`          | Under | ⭐⭐           | ⭐     | Remove noisy samples                      | Very expensive on large data         |
+| `RepeatedEditedNearestNeighbours (RENN)` | Under | ⭐            | ⭐     | Aggressive noise removal                  | Multiple ENN passes                  |
+| `AllKNN`                                 | Under | ⭐            | ⭐     | Progressive ENN cleaning                  | Computationally heavy                |
+| `CondensedNearestNeighbour (CNN)`        | Under | ⭐⭐           | ⭐⭐    | Keep representative majority samples      | Produces compact dataset             |
+| `OneSidedSelection (OSS)`                | Under | ⭐⭐           | ⭐⭐    | Remove redundant majority examples        | CNN + Tomek Links                    |
+| `NeighbourhoodCleaningRule (NCL)`        | Under | ⭐⭐           | ⭐     | Clean class boundaries                    | Strong noise reduction               |
+| `InstanceHardnessThreshold (IHT)`        | Under | ⭐⭐⭐          | ⭐⭐    | Remove hard-to-classify majority samples  | Requires model training              |
+| `ClusterCentroids`                       | Under | ⭐⭐⭐          | ⭐⭐⭐   | Replace majority with centroids           | Information compression              |
+
+## OverSampling Guide
+
+| Class Name          | Type    | Dataset Size | Speed | Purpose                                  | Other                            |
+|---------------------|---------|--------------|-------|------------------------------------------|----------------------------------|
+| `RandomOverSampler` | Over    | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐ | Duplicate minority samples               | Fastest oversampler              |
+| `SMOTE`             | Over    | ⭐⭐⭐          | ⭐⭐⭐   | Generate synthetic minority samples      | Most widely used                 |
+| `BorderlineSMOTE`   | Over    | ⭐⭐           | ⭐⭐    | Focus on decision boundary               | Better for overlap regions       |
+| `SVMSMOTE`          | Over    | ⭐            | ⭐     | SMOTE guided by SVM                      | Very slow                        |
+| `KMeansSMOTE`       | Over    | ⭐⭐           | ⭐⭐    | Cluster-aware synthetic generation       | Better for complex distributions |
+| `ADASYN`            | Over    | ⭐⭐           | ⭐⭐    | Generate more samples in difficult areas | Can amplify noise                |
+| `SMOTENC`           | Over    | ⭐⭐⭐          | ⭐⭐⭐   | Mixed numerical/categorical features     | Common in business data          |
+| `SMOTEN`            | Over    | ⭐⭐           | ⭐⭐⭐   | Fully categorical datasets               | Rare but useful                  |
+| `SMOTEENN`*         | Combine | —            | —     | Listed below                             | Combination method               |
+| `SMOTETomek`*       | Combine | —            | —     | Listed below                             | Combination method               |
+
+## Combine Methods 
+
+| Class Name   | Type    | Dataset Size | Speed | Purpose               | Other                            |
+|--------------|---------|--------------|-------|-----------------------|----------------------------------|
+| `SMOTEENN`   | Combine | ⭐⭐           | ⭐⭐    | SMOTE + ENN cleaning  | Often strong accuracy, expensive |
+| `SMOTETomek` | Combine | ⭐⭐⭐          | ⭐⭐⭐   | SMOTE + Tomek cleanup | Popular balanced approach        |
+
+## Ensemble Methods
+
+| Class Name                       | Type     | Dataset Size | Speed | Purpose                                 | Other                              |
+|----------------------------------|----------|--------------|-------|-----------------------------------------|------------------------------------|
+| `BalancedBaggingClassifier`      | Ensemble | ⭐⭐⭐⭐         | ⭐⭐⭐   | Bagging with balanced bootstrap samples | Good baseline                      |
+| `BalancedRandomForestClassifier` | Ensemble | ⭐⭐⭐⭐         | ⭐⭐⭐⭐  | Random forest with class balancing      | Production-friendly                |
+| `EasyEnsembleClassifier`         | Ensemble | ⭐⭐⭐⭐         | ⭐⭐⭐⭐  | Multiple undersampled AdaBoost models   | Very effective on severe imbalance |
+| `RUSBoostClassifier`             | Ensemble | ⭐⭐⭐          | ⭐⭐⭐   | Random undersampling + Boosting         | Good for difficult imbalance       |
+
+
+## Practical Recommendations
+
+| Situation                          | Recommended Method                                                    |
+|------------------------------------|-----------------------------------------------------------------------|
+| Dataset < 50k rows                 | `SMOTE`, `BorderlineSMOTE`, `SMOTEENN`                                |
+| Dataset 50k–500k rows              | `RandomUnderSampler`, `SMOTENC`, `BalancedRandomForestClassifier`     |
+| Dataset > 500k rows                | `RandomUnderSampler`, `BalancedRandomForestClassifier`, class weights |
+| Millions of rows                   | Class weights, `EasyEnsembleClassifier`, gradient boosting            |
+| High-dimensional One-Hot data      | Avoid ENN, NearMiss, AllKNN                                           |
+| Noisy data                         | `ENN`, `NCL`, `SMOTEENN`                                              |
+| Strong class overlap               | `BorderlineSMOTE`, `SMOTETomek`                                       |
+| Extreme imbalance (1:100+)         | `EasyEnsembleClassifier`, `BalancedRandomForestClassifier`            |
+| Mixed categorical/numeric features | `SMOTENC`                                                             |
+| All categorical features           | `SMOTEN`                                                              |
 
 
 
