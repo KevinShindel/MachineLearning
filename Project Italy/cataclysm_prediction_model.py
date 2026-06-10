@@ -109,10 +109,10 @@ def forecasting_and_plotting(model: HoltWintersResults, df: pd.DataFrame) -> Non
     plt.ylabel("Total Damage")
     plt.show()
 
-    # TODO: This prediction does not make sense, because ML cannot predict catastrophes.
-    #  It is not possible to predict
-    # TODO: Further development does not make sense, because the prediction is not possible.
-    #  The model is not useful.
+    # This prediction does not make sense, because ML cannot predict catastrophes.
+    # It is not possible to predict
+    # Further development does not make sense, because the prediction is not possible.
+    # The model is not useful.
 
 
 if __name__ == "__main__":

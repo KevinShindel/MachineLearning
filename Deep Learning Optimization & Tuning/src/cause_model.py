@@ -55,10 +55,5 @@ def predict_causes():
     plot_graph(accuracy_measures, "Compare Cumulative Improvements")
 
 
-def experiment_w_hyperparams():
-    # TODO: Implement hyperparameter tuning
-    pass
-
-
 if __name__ == "__main__":
     predict_causes()

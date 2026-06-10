@@ -231,7 +231,6 @@ def forecast_claims(e_df=None, w_df=None):
     # Forecast the gross for 2021-2028
     forecast = model.predict(start="2021", end="2028")
 
-    # TODO: Create table, 2020 is 100% and further values in % and values.
     table_df = pd.DataFrame(forecast, columns=["gross"])
     table_df["changed in %"] = round(table_df["gross"].pct_change() * 100, 2)
     table_df.loc["2020", "changed in %"] = 0

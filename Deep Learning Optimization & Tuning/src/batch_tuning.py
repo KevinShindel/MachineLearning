@@ -43,11 +43,5 @@ def iteration_experiment():
     print(history.history["accuracy"])
 
 
-def experiment_w_best_hyperparams():
-    # TODO: Implement this function
-    pass
-
-
 if __name__ == "__main__":
     iteration_experiment()
-    # experiment_w_best_hyperparams()

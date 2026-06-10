@@ -4,7 +4,6 @@ Author: Kevin Shindel
 Date: 2024-11-05
 """
 
-# import libraries
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -54,26 +53,9 @@ def main():
     )
 
     # Trend feature engineering
-
     # example of Trend feature engineering
     data = pd.read_csv("data.csv")
     data["InvoiceDate"] = pd.to_datetime(data["InvoiceDate"])
-    max_year = data["InvoiceDate"].dt.year.max()
-    avg_purchase_3m = data
-    avg_purchase_6m = data
-    avg_time_bw_purchases = data
-
-    # Calculate average purchase in the last 3 months
-    avg_purchase_3m = data[
-        data["InvoiceDate"] > pd.to_datetime(str(max_year) + "-03-01")
-    ]
-    avg_purchase_3m = avg_purchase_3m.groupby("CustomerID")["TotalSum"].mean()
-
-    # Calculate average purchase in the last 6 months
-    avg_purchase_6m = data[
-        data["InvoiceDate"] > pd.to_datetime(str(max_year) + "-06-01")
-    ]
-    avg_purchase_6m = avg_purchase_6m.groupby("CustomerID")["TotalSum"].mean()
 
     # Calculate average time between purchases
     data = data.sort_values(by=["CustomerID", "InvoiceDate"])
@@ -81,26 +63,20 @@ def main():
     avg_time_bw_purchases = data.groupby("CustomerID")["TimeDiff"].mean()
     print(avg_time_bw_purchases)
 
-    # TODO: Create example of Logarithm feature engineering
-
-    # TODO: Create example of Power feature engineering
-
-    # example of Box-Cox Transformation
     hmeq = pd.read_csv("hmeq.csv")
 
+    # example of Box-Cox Transformation
     hmeq["BOXCOX_LOAN"] = boxcox(hmeq["LOAN"], 0.5)
+    # example of Power feature engineering
+    hmeq["PRW_LOAN"] = np.power(hmeq["LOAN"], 2)
+    # example of Log feature engineering
+    hmeq["LOG_LOAN"] = np.log1p(hmeq["LOAN"])
+
+
 
     hmeq.hist(column="LOAN", bins=50)
     hmeq.hist(column="BOXCOX_LOAN", bins=50)
     plt.show()
-
-    # TODO: Create example of Yeo Johnson Transformation
-
-    # TODO: Create example of Performance Optimization
-
-    # TODO: Principal Component Analysis (PCA)
-
-    # TODO: Create example t-SNE feature engineering
 
 
 if __name__ == "__main__":

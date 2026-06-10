@@ -20,11 +20,5 @@ def iteration_overfitting_experiment():
     plot_graph(accuracy_measures, "Compare Regularizers")
 
 
-def experiment_w_best_hyperparams():
-    # TODO: Create method with tunned hyperparameters
-    pass
-
-
 if __name__ == "__main__":
     iteration_overfitting_experiment()
-    # experiment_w_best_hyperparams()

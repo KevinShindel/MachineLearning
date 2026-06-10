@@ -20,11 +20,5 @@ def dropout_management():
     plot_graph(accuracy_measures, "Compare Dropout")
 
 
-def experiment_w_hyperparameters():
-    # TODO: Create method with tunned hyperparameters
-    pass
-
-
 if __name__ == "__main__":
     dropout_management()
-    # experiment_w_hyperparameters()
