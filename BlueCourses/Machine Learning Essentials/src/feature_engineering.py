@@ -72,8 +72,6 @@ def main():
     # example of Log feature engineering
     hmeq["LOG_LOAN"] = np.log1p(hmeq["LOAN"])
 
-
-
     hmeq.hist(column="LOAN", bins=50)
     hmeq.hist(column="BOXCOX_LOAN", bins=50)
     plt.show()
