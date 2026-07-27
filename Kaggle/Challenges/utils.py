@@ -6,9 +6,14 @@ from optuna.study import StudyDirection
 from optuna.trial import FrozenTrial
 from pandas import Series
 from sklearn.feature_selection import mutual_info_regression
-from sklearn.metrics import (ConfusionMatrixDisplay, accuracy_score,
-                             classification_report, confusion_matrix,
-                             roc_auc_score, roc_curve)
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    accuracy_score,
+    classification_report,
+    confusion_matrix,
+    roc_auc_score,
+    roc_curve,
+)
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
 

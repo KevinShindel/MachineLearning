@@ -1,6 +1,9 @@
-from DLOptimizationAndTuning.src.utils import (base_model_config,
-                                               create_and_run_model, get_data,
-                                               plot_graph)
+from DLOptimizationAndTuning.src.utils import (
+    base_model_config,
+    create_and_run_model,
+    get_data,
+    plot_graph,
+)
 
 
 def iteration_weights_experiment():
