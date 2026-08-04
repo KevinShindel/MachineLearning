@@ -226,7 +226,7 @@ def forecast_claims(e_df=None, w_df=None):
 
     # calc mse
     mse = mean_squared_error(x_test, forecast)
-    print(f"Mean Squared Error for Gross Claims Predictor: {mse}")  #
+    print(f"Mean Squared Error for Gross Claims Predictor: {mse}")
 
     # Forecast the gross for 2021-2028
     forecast = model.predict(start="2021", end="2028")

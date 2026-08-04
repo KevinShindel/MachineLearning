@@ -30,7 +30,7 @@ class TaxiDurationPredictor(mlflow.pyfunc.PythonModel):
             else:
                 raise FileNotFoundError(f"Model file not found at {self.model_path}")
         except Exception as e:
-            logger.error(f"Error loading model: {str(e)}")
+            logger.error(f"Error loading model: {e!s}")
             raise
 
     def predict(self, context, model_input):
@@ -43,7 +43,7 @@ class TaxiDurationPredictor(mlflow.pyfunc.PythonModel):
         try:
             return self.model.predict(model_input)
         except Exception as e:
-            logger.error(f"Prediction error: {str(e)}")
+            logger.error(f"Prediction error: {e!s}")
             raise
 
 
@@ -137,7 +137,7 @@ def log_model_to_mlflow(
             return run.info.run_id
 
     except Exception as e:
-        logger.error(f"Error logging model to MLflow: {str(e)}")
+        logger.error(f"Error logging model to MLflow: {e!s}")
         raise
 
 
@@ -190,7 +190,7 @@ def main():
             time.sleep(1)
 
     except Exception as e:
-        logger.error(f"Error: {str(e)}")
+        logger.error(f"Error: {e!s}")
         sys.exit(1)
 
 

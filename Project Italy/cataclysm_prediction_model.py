@@ -7,8 +7,7 @@ Description:
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from statsmodels.tsa.holtwinters import (ExponentialSmoothing,
-                                         HoltWintersResults)
+from statsmodels.tsa.holtwinters import ExponentialSmoothing, HoltWintersResults
 from utils import adjust_model
 
 MAX_PREDICTION = 4
