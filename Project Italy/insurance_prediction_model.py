@@ -14,14 +14,20 @@ import pandas as pd
 import seaborn as sns
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
+import mplcyberpunk
 
 warnings.filterwarnings("ignore")
-sns.set(style="darkgrid")
+plt.style.use("cyberpunk")
+
+mplcyberpunk.add_glow_effects()
+
+mplcyberpunk.make_lines_glow()
+mplcyberpunk.add_gradient_fill(alpha_gradientglow=0.5)
 
 
 def forecast_warming():
     df = pd.read_csv(
-        "../../dataset/temperature_anomaly.csv",
+        "../dataset/temperature_anomaly.csv",
         index_col="year",
         parse_dates=True,
         usecols=["year", "avg_anomaly_temp"],
@@ -53,7 +59,8 @@ def forecast_warming():
     plt.xlabel("Year")
     plt.title("Italy Global Warming Anomaly Predicted vs Real 1860 – 2022")
     plt.legend()
-    plt.savefig("assets/Italy_3.png", dpi=500)
+    mplcyberpunk.add_glow_effects()
+    plt.savefig("artifacts/Italy_3.png", dpi=500)
     plt.show()
 
     # 4. Plot the forecasted data
@@ -64,7 +71,7 @@ def forecast_warming():
     plt.ylabel("Temperature Anomaly in Celsius")
     plt.title("Italy Global Warming Anomaly Predicted vs Real 2023 – 2028")
     plt.legend()
-    plt.savefig("assets/Italy_4.png", dpi=500)
+    plt.savefig("artifacts/Italy_4.png", dpi=500)
     plt.show()
     forecasted_df = pd.DataFrame(
         forecast,
@@ -86,7 +93,7 @@ def forecast_warming():
     plt.ylabel("Temperature Anomaly changes in %")
     plt.title("Italy Global Warming Anomaly Predicted 2023 – 2028")
     plt.tight_layout()
-    plt.savefig("assets/Italy_4_table.png", dpi=500)
+    plt.savefig("artifacts/Italy_4_table.png", dpi=500)
     plt.show()
 
     return full_df
@@ -95,7 +102,7 @@ def forecast_warming():
 def forecast_emissions():
     # Read the data
     df = pd.read_csv(
-        "../../dataset/co2_emission.csv",
+        "../dataset/co2_emission.csv",
         index_col="year",
         parse_dates=True,
         usecols=["year", "emissions"],
@@ -122,7 +129,7 @@ def forecast_emissions():
     plt.xlabel("Year")
     plt.title("Italy CO2 Emissions: Predicted vs Real 1860 - 2022")
     plt.legend()
-    plt.savefig("assets/Italy_1.png", dpi=500)
+    plt.savefig("artifacts/Italy_1.png", dpi=500)
     plt.show()
 
     # 2. Create plot with real data and forecasted data
@@ -132,14 +139,14 @@ def forecast_emissions():
     plt.ylabel("Emission")
     plt.title("Italy CO2 Emissions: Predicted vs Real 2020 - 2028")
     plt.legend()
-    plt.savefig("assets/Italy_2.png", dpi=500)
+    plt.savefig("artifacts/Italy_2.png", dpi=500)
     plt.show()
 
     # union forecasted and real data
     forecasted_df = pd.DataFrame(
         forecast,
         columns=["emissions"],
-        index=pd.date_range("2023", periods=6, freq="AS"),
+        index=pd.date_range("2023", periods=6, freq="YS"),
     )
     full_df = pd.concat([df, forecasted_df])
     return full_df
@@ -150,7 +157,7 @@ def forecast_claims(e_df=None, w_df=None):
 
     # read gross and clean insurance index from historical data
     claims_df = pd.read_csv(
-        "../../dataset/IT_claims_2004_2020.csv",
+        "../dataset/IT_claims_2004_2020.csv",
         index_col="year",
         parse_dates=True,
         thousands=",",
@@ -184,7 +191,7 @@ def forecast_claims(e_df=None, w_df=None):
         x=0.6,
     )
     plt.tight_layout()
-    plt.savefig("assets/Italy_6.png", dpi=500)
+    plt.savefig("artifacts/Italy_6.png", dpi=500)
     plt.show()
 
     # we found that correlation between emissions and gross index is negative,
@@ -218,7 +225,7 @@ def forecast_claims(e_df=None, w_df=None):
         x=0.4,
     )
     plt.tight_layout()
-    plt.savefig("assets/Italy_7.png", dpi=500)
+    plt.savefig("artifacts/Italy_7.png", dpi=500)
     plt.show()
 
     # Forecast the gross for 2016-2020
@@ -242,7 +249,7 @@ def forecast_claims(e_df=None, w_df=None):
     plt.ylabel("Gross Claims Expenditures changes in %")
     plt.title("Gross Claims Expenditures Predicted 2020 – 2028")
     plt.tight_layout()
-    plt.savefig("assets/Italy_8_table.png", dpi=500)
+    plt.savefig("artifacts/Italy_8_table.png", dpi=500)
     plt.show()
     print(table_df)
 
@@ -257,7 +264,7 @@ def forecast_claims(e_df=None, w_df=None):
     )
     plt.legend()
     plt.tight_layout()
-    plt.savefig("assets/Italy_8.png", dpi=500)
+    plt.savefig("artifacts/Italy_8.png", dpi=500)
     plt.show()
 
 
@@ -286,7 +293,7 @@ if __name__ == "__main__":
         x=0.6,
     )
     plt.tight_layout()
-    plt.savefig("assets/Italy_5.png", dpi=500)
+    plt.savefig("artifacts/Italy_5.png", dpi=500)
     plt.show()
 
     forecast_claims(emission_df, warming_df)

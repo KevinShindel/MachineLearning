@@ -77,7 +77,7 @@ def adjust_model(df):
 
                     # seems test data is not equaled to predictions, need to equal to len and fill with 0
                     if len(test) < len(predictions):
-                        test = test.resample("AS").sum().fillna(0)
+                        test = test.resample("YS").sum().fillna(0)
 
                     # Calculate the score
                     score = mean_squared_error(test, predictions)

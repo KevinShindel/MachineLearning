@@ -41,7 +41,7 @@ def create_model(df: pd.DataFrame) -> HoltWintersResults:
 def load_data() -> pd.DataFrame:
     # this function will load the data
     df = pd.read_csv(
-        "../../dataset/ItalyDisastersDB_1900_2024.csv",
+        "../dataset/ItalyDisastersDB_1900_2024.csv",
         usecols=["Start Year", "Total Damage, Adjusted ('000 US$)"],
         index_col="Start Year",
     )
