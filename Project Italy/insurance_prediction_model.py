@@ -10,11 +10,11 @@ The script also calculates the insurance rate for each year based on the tempera
 import warnings
 
 import matplotlib.pyplot as plt
+import mplcyberpunk
 import pandas as pd
 import seaborn as sns
 from sklearn.metrics import mean_squared_error
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
-import mplcyberpunk
 
 warnings.filterwarnings("ignore")
 plt.style.use("cyberpunk")
