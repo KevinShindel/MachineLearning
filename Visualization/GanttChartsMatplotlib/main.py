@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Patch
 from pandas import Categorical, DataFrame, Series, date_range
-from pandas._libs.tslibs.offsets import Day
+from pandas._libs.tslibs import Day
 
 
 def main():
